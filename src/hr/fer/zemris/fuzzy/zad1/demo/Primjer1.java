@@ -1,6 +1,6 @@
-package hr.fer.zemris.fuzzy.lab1.examples;
+package hr.fer.zemris.fuzzy.zad1.demo;
 
-import hr.fer.zemris.fuzzy.lab1.*;
+import hr.fer.zemris.fuzzy.zad1.*;
 
 public class Primjer1 {
     public static void main(String[] args) {

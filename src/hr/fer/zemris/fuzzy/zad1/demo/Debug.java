@@ -1,8 +1,8 @@
-package hr.fer.zemris.fuzzy.lab1.examples;
+package hr.fer.zemris.fuzzy.zad1.demo;
 
-import hr.fer.zemris.fuzzy.lab1.DomainElement;
-import hr.fer.zemris.fuzzy.lab1.IDomain;
-import hr.fer.zemris.fuzzy.lab1.IFuzzySet;
+import hr.fer.zemris.fuzzy.zad1.DomainElement;
+import hr.fer.zemris.fuzzy.zad1.IDomain;
+import hr.fer.zemris.fuzzy.zad1.IFuzzySet;
 
 public class Debug {
 

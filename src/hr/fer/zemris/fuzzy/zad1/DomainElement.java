@@ -1,4 +1,4 @@
-package hr.fer.zemris.fuzzy.lab1;
+package hr.fer.zemris.fuzzy.zad1;
 
 import java.util.Arrays;
 
@@ -6,7 +6,7 @@ public class DomainElement {
 
     private int[] values;
 
-    public DomainElement(int[] values) {
+    public DomainElement(int... values) {
         if (values == null || values.length < 1) {
             throw new IllegalArgumentException("Invalid initialization array");
         }
