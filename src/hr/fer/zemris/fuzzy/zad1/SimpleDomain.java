@@ -65,4 +65,22 @@ public class SimpleDomain extends Domain {
     public int getLast() {
         return last;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimpleDomain that = (SimpleDomain) o;
+
+        if (first != that.first) return false;
+        return last == that.last;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = first;
+        result = 31 * result + last;
+        return result;
+    }
 }

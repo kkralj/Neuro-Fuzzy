@@ -5,7 +5,14 @@ import hr.fer.zemris.fuzzy.zad1.*;
 public class Relations {
 
     public static boolean isUtimesURelation(IFuzzySet relation) {
-        return relation.getDomain().getNumberOfComponents() == 2;
+        if (relation.getDomain().getNumberOfComponents() != 2) {
+            return false;
+        }
+
+        IDomain domain1 = relation.getDomain().getComponent(0);
+        IDomain domain2 = relation.getDomain().getComponent(1);
+
+        return domain1.equals(domain2);
     }
 
     public static boolean isSymmetric(IFuzzySet relation) {

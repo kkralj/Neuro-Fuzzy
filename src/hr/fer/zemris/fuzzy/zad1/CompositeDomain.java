@@ -1,6 +1,8 @@
 package hr.fer.zemris.fuzzy.zad1;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class CompositeDomain extends Domain {
 
@@ -9,7 +11,7 @@ public class CompositeDomain extends Domain {
     private int cardinality = 1;
 
     public CompositeDomain(SimpleDomain... components) {
-        this.components = components;
+        this.components = Objects.requireNonNull(components);
 
         for (SimpleDomain component : components) {
             cardinality *= component.getCardinality();
@@ -89,5 +91,23 @@ public class CompositeDomain extends Domain {
             used++;
             return new DomainElement(values);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompositeDomain that = (CompositeDomain) o;
+
+        if (cardinality != that.cardinality) return false;
+        return Arrays.equals(components, that.components);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(components);
+        result = 31 * result + cardinality;
+        return result;
     }
 }
