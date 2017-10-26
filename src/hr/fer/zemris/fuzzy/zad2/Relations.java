@@ -79,30 +79,29 @@ public class Relations {
         IDomain dy = rel1.getDomain().getComponent(1);
         IDomain dz = rel2.getDomain().getComponent(1);
 
-        MutableFuzzySet result = new MutableFuzzySet(Domain.combine(dx, dz));
-
-        if (dy.getCardinality() != rel2.getDomain().getComponent(0).getCardinality()) {
+        if (!dy.equals(rel2.getDomain().getComponent(0))) {
             throw new IllegalArgumentException("Cannot create composition.");
         }
+
+        MutableFuzzySet result = new MutableFuzzySet(Domain.combine(dx, dz));
 
         for (DomainElement x : dx) {
             int valX = x.getComponentValue(0);
             for (DomainElement z : dz) {
                 int valZ = z.getComponentValue(0);
+
+                DomainElement elXZ = DomainElement.of(valX, valZ);
+                double valXZ = result.getValueAt(elXZ);
+
                 for (DomainElement y : dy) {
                     int valY = y.getComponentValue(0);
-
                     DomainElement elXY = DomainElement.of(valX, valY);
                     DomainElement elYZ = DomainElement.of(valY, valZ);
-                    DomainElement elXZ = DomainElement.of(valX, valZ);
 
-                    result.set(elXZ,
-                            Math.max(
-                                    result.getValueAt(elXZ),
-                                    Math.min(rel1.getValueAt(elXY), rel2.getValueAt(elYZ))
-                            )
-                    );
+                    valXZ = Math.max(valXZ, Math.min(rel1.getValueAt(elXY), rel2.getValueAt(elYZ)));
                 }
+
+                result.set(elXZ, valXZ);
             }
         }
 
