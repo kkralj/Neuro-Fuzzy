@@ -9,7 +9,7 @@ public class Primjer3 {
         IDomain u = Domain.intRange(1, 5);
 
         IFuzzySet r = new MutableFuzzySet(Domain.combine(u, u))
-                .set(DomainElement.of(1, 1), 1)
+                .set(DomainElement.of(1, 1), 0.1)
                 .set(DomainElement.of(2, 2), 1)
                 .set(DomainElement.of(3, 3), 1)
                 .set(DomainElement.of(4, 4), 1)
@@ -25,7 +25,7 @@ public class Primjer3 {
         System.out.println("Početna relacija je neizrazita relacija ekvivalencije? " + Relations.isFuzzyEquivalence(r2));
         System.out.println();
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 30; i++) {
             r2 = Relations.compositionOfBinaryRelations(r2, r);
             System.out.println("Broj odrađenih kompozicija: " + i + ". Relacija je:");
 
