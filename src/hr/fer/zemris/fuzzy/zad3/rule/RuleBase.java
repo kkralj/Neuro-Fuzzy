@@ -17,11 +17,14 @@ public class RuleBase {
     private static final IFuzzySet NEAR_SHORE =
             new CalculatedFuzzySet(DISTANCE_DOMAIN, StandardFuzzySets.lFunction(35, 45));
 
+    private static final IFuzzySet FAR_FROM_SHORE =
+            new CalculatedFuzzySet(DISTANCE_DOMAIN, StandardFuzzySets.gammaFunction(75, 95));
+
     private static final IFuzzySet GOING_FAST =
-            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.gammaFunction(45, 60));
+            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.gammaFunction(40, 60));
 
     private static final IFuzzySet GOING_SLOW =
-            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.lFunction(25, 35));
+            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.lFunction(15, 25));
 
     // Actions
     private static final IFuzzySet TURN_RIGHT =
@@ -31,7 +34,7 @@ public class RuleBase {
             new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.gammaFunction(100, 115));
 
     private static final IFuzzySet SLOW_DOWN =
-            new CalculatedFuzzySet(ACCELERATION_DOMAIN, StandardFuzzySets.lambdaFunction(-65, -60, -55));
+            new CalculatedFuzzySet(ACCELERATION_DOMAIN, StandardFuzzySets.lFunction(40, 50));
 
     private static final IFuzzySet SPEED_UP =
             new CalculatedFuzzySet(ACCELERATION_DOMAIN, StandardFuzzySets.lambdaFunction(65, 70, 75));
@@ -56,6 +59,9 @@ public class RuleBase {
 
         IFuzzySet[] goingTooSlow = {null, null, null, null, GOING_SLOW, null};
         rules.add(new Rule(goingTooSlow, SPEED_UP));
+
+        IFuzzySet[] clearSea = {FAR_FROM_SHORE, FAR_FROM_SHORE, FAR_FROM_SHORE, FAR_FROM_SHORE, null, null};
+        rules.add(new Rule(clearSea, SPEED_UP));
 
         return rules;
     }
