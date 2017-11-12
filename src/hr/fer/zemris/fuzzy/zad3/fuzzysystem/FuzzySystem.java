@@ -41,4 +41,8 @@ public class FuzzySystem {
         return (int) defuzzifier.defuzzify(total);
     }
 
+    public List<Rule> getRules() {
+        return rules;
+    }
+
 }

@@ -21,4 +21,15 @@ public class CalculatedFuzzySet implements IFuzzySet {
     public double getValueAt(DomainElement element) {
         return function.valueAt(domain.indexOfElement(element));
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (DomainElement element : domain) {
+            result.append("Element [ ").append(element).append(" ], ")
+                    .append("mi = ( ").append(getValueAt(element)).append(" )")
+                    .append("\n");
+        }
+        return result.toString();
+    }
 }

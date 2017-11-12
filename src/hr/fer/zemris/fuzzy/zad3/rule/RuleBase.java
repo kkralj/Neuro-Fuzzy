@@ -18,20 +18,20 @@ public class RuleBase {
             new CalculatedFuzzySet(DISTANCE_DOMAIN, StandardFuzzySets.lFunction(35, 45));
 
     private static final IFuzzySet FAR_FROM_SHORE =
-            new CalculatedFuzzySet(DISTANCE_DOMAIN, StandardFuzzySets.gammaFunction(75, 95));
+            new CalculatedFuzzySet(DISTANCE_DOMAIN, StandardFuzzySets.gammaFunction(55, 65));
 
     private static final IFuzzySet GOING_FAST =
-            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.gammaFunction(40, 60));
+            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.gammaFunction(45, 55));
 
     private static final IFuzzySet GOING_SLOW =
-            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.lFunction(15, 25));
+            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.lFunction(15, 35));
 
     // Actions
     private static final IFuzzySet TURN_RIGHT =
             new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.lFunction(0, 15));
 
     private static final IFuzzySet TURN_LEFT =
-            new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.gammaFunction(100, 115));
+            new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.gammaFunction(130, 145));
 
     private static final IFuzzySet SLOW_DOWN =
             new CalculatedFuzzySet(ACCELERATION_DOMAIN, StandardFuzzySets.lFunction(40, 50));

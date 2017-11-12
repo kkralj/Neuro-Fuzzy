@@ -19,6 +19,10 @@ public class COADefuzzifier implements Defuzzifier {
             totalMembership += mi;
         }
 
+        if (Math.abs(totalMembership) < 1e-9) {
+            return 0;
+        }
+
         return result / totalMembership;
     }
 }

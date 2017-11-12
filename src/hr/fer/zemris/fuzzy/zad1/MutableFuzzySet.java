@@ -32,10 +32,12 @@ public class MutableFuzzySet implements IFuzzySet {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder();
-        for (DomainElement el : domain) {
-            res.append("el: ").append(el.toString()).append(" mi(el) = ").append(getValueAt(el)).append("\n");
+        StringBuilder result = new StringBuilder();
+        for (DomainElement element : domain) {
+            result.append("Element [ ").append(element).append(" ], ")
+                    .append("mi = ( ").append(getValueAt(element)).append(" )")
+                    .append("\n");
         }
-        return res.toString();
+        return result.toString();
     }
 }
