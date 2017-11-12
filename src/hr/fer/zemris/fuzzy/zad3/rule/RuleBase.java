@@ -7,33 +7,43 @@ import java.util.List;
 
 public class RuleBase {
 
+    // Domains
     private static final IDomain ANGLE_DOMAIN = new SimpleDomain(-90, 90 + 1);
     private static final IDomain DISTANCE_DOMAIN = new SimpleDomain(0, 1300 + 1);
     private static final IDomain ACCELERATION_DOMAIN = new SimpleDomain(-50, 50 + 1);
     private static final IDomain VELOCITY_DOMAIN = new SimpleDomain(0, 100 + 1);
 
+    // Conditions
+    private static final IFuzzySet NEAR_SHORE =
+            new CalculatedFuzzySet(DISTANCE_DOMAIN, StandardFuzzySets.lFunction(35, 45));
+
+    private static final IFuzzySet GOING_FAST =
+            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.gammaFunction(45, 60));
+
+    private static final IFuzzySet GOING_SLOW =
+            new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.lFunction(25, 35));
+
+    // Actions
     private static final IFuzzySet TURN_RIGHT =
             new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.lFunction(0, 15));
 
     private static final IFuzzySet TURN_LEFT =
-            new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.gammaFunction(140, 155));
+            new CalculatedFuzzySet(ANGLE_DOMAIN, StandardFuzzySets.gammaFunction(100, 115));
 
+    private static final IFuzzySet SLOW_DOWN =
+            new CalculatedFuzzySet(ACCELERATION_DOMAIN, StandardFuzzySets.lambdaFunction(-65, -60, -55));
+
+    private static final IFuzzySet SPEED_UP =
+            new CalculatedFuzzySet(ACCELERATION_DOMAIN, StandardFuzzySets.lambdaFunction(65, 70, 75));
 
     public static List<Rule> getHelmRules() {
         List<Rule> rules = new ArrayList<>();
 
-        IFuzzySet nearShore = new CalculatedFuzzySet(DISTANCE_DOMAIN,
-                StandardFuzzySets.lFunction(35, 45));
+        IFuzzySet[] nearLeftEdge = {null, null, NEAR_SHORE, null, null, null};
+        rules.add(new Rule(nearLeftEdge, TURN_RIGHT));
 
-        IFuzzySet[] nearLeftEdgeAnt = {null, null, nearShore, null, null, null};
-
-        Rule nearLeftShoreRule = new Rule(nearLeftEdgeAnt, TURN_RIGHT);
-        rules.add(nearLeftShoreRule);
-
-        IFuzzySet[] nearRightShoreAntecedents = {null, null, null, nearShore, null, null};
-
-        Rule nearRightShoreRule = new Rule(nearRightShoreAntecedents, TURN_LEFT);
-        rules.add(nearRightShoreRule);
+        IFuzzySet[] nearRightEdge = {null, null, null, NEAR_SHORE, null, null};
+        rules.add(new Rule(nearRightEdge, TURN_LEFT));
 
         return rules;
     }
@@ -41,22 +51,11 @@ public class RuleBase {
     public static List<Rule> getAccelerationRules() {
         List<Rule> rules = new ArrayList<>();
 
-        IFuzzySet tooFast = new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.gammaFunction(15, 30));
+        IFuzzySet[] goingTooFast = {null, null, null, null, GOING_FAST, null};
+        rules.add(new Rule(goingTooFast, SLOW_DOWN));
 
-        IFuzzySet[] goingTooFastAntecedents = {null, null, null, null, tooFast, null};
-        IFuzzySet goingTooFastConsequence = new CalculatedFuzzySet(
-                ACCELERATION_DOMAIN, StandardFuzzySets.lFunction(-15, 0));
-
-        Rule tooFastRule = new Rule(goingTooFastAntecedents, goingTooFastConsequence);
-        rules.add(tooFastRule);
-
-        IFuzzySet tooSlow = new CalculatedFuzzySet(VELOCITY_DOMAIN, StandardFuzzySets.lFunction(15, 30));
-        IFuzzySet[] goingTooSlowAntecedents = {null, null, null, null, tooSlow, null};
-        IFuzzySet goingTooSlowConsequence = new CalculatedFuzzySet(
-                ACCELERATION_DOMAIN, StandardFuzzySets.gammaFunction(0, 10));
-
-        Rule tooSlowRule = new Rule(goingTooSlowAntecedents, goingTooSlowConsequence);
-        rules.add(tooSlowRule);
+        IFuzzySet[] goingTooSlow = {null, null, null, null, GOING_SLOW, null};
+        rules.add(new Rule(goingTooSlow, SPEED_UP));
 
         return rules;
     }
