@@ -1,4 +1,4 @@
-java -jar ../out/artifacts/fuzzyControlSystem_jar/fuzzyControlSystem.jar
-3
+java -jar ../out/artifacts/fuzzyControlSystem_jar/fuzzyControlSystem.jar 
+1
 20
 10

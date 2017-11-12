@@ -29,4 +29,13 @@ public class MutableFuzzySet implements IFuzzySet {
         memberships[index] = value;
         return this;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        for (DomainElement el : domain) {
+            res.append("el: ").append(el.toString()).append(" mi(el) = ").append(getValueAt(el)).append("\n");
+        }
+        return res.toString();
+    }
 }
