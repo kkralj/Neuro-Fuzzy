@@ -38,7 +38,6 @@ public class RuleTesting {
             System.out.println("Fuzzy set: " + result);
             System.out.println("Decoded value: " + def.defuzzify(result));
             System.out.println("Conclusion: " + fsHelm.conclude(L, D, LK, DK, V, S));
-
         }
     }
 }
