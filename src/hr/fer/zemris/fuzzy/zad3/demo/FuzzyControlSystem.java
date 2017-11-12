@@ -1,10 +1,10 @@
-package hr.fer.zemris.fuzzy.zad3;
+package hr.fer.zemris.fuzzy.zad3.demo;
 
-import hr.fer.zemris.fuzzy.zad3.defuzzifiers.COADefuzzifier;
 import hr.fer.zemris.fuzzy.zad3.defuzzifiers.Defuzzifier;
-import hr.fer.zemris.fuzzy.zad3.fuzzysystem.AkcelFuzzySystemMin;
+import hr.fer.zemris.fuzzy.zad3.defuzzifiers.impl.COADefuzzifier;
 import hr.fer.zemris.fuzzy.zad3.fuzzysystem.FuzzySystem;
-import hr.fer.zemris.fuzzy.zad3.fuzzysystem.KormiloFuzzySystemMin;
+import hr.fer.zemris.fuzzy.zad3.rule.Rule;
+import hr.fer.zemris.fuzzy.zad3.rule.RuleBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +17,8 @@ public class FuzzyControlSystem {
 
         Defuzzifier def = new COADefuzzifier();
 
-        FuzzySystem fsAkcel = new AkcelFuzzySystemMin(def);
-        FuzzySystem fsKormilo = new KormiloFuzzySystemMin(def);
+        FuzzySystem fsAkcel = new FuzzySystem(def, RuleBase.getAccelerationRules(), Rule.PRODUCT_OPEATOR);
+        FuzzySystem fsKormilo = new FuzzySystem(def, RuleBase.getHelmRules(), Rule.PRODUCT_OPEATOR);
 
         int L, D, LK, DK, V, S, A, K;
         String line;

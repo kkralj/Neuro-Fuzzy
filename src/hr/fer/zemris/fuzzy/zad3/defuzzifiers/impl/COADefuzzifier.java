@@ -1,7 +1,8 @@
-package hr.fer.zemris.fuzzy.zad3.defuzzifiers;
+package hr.fer.zemris.fuzzy.zad3.defuzzifiers.impl;
 
 import hr.fer.zemris.fuzzy.zad1.DomainElement;
 import hr.fer.zemris.fuzzy.zad1.IFuzzySet;
+import hr.fer.zemris.fuzzy.zad3.defuzzifiers.Defuzzifier;
 
 /**
  * CenterOfArea defuzzifier
