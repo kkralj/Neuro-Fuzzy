@@ -32,12 +32,14 @@ public class RuleTesting {
             System.out.println("Enter rule index:");
             rule_ind = s.nextInt();
 
-            IFuzzySet result = fsHelm.getRules()
-                    .get(rule_ind).getResult(new int[]{L, D, LK, DK, V, S}, Rule.PRODUCT_OPEATOR);
+            for (int i = 0; i < fsAccel.getRules().size(); i++) {
+                IFuzzySet result = fsAccel.getRules().get(i).getResult(new int[]{L, D, LK, DK, V, S}, Rule.PRODUCT_OPEATOR);
 
-            System.out.println("Fuzzy set: " + result);
-            System.out.println("Decoded value: " + def.defuzzify(result));
-            System.out.println("Conclusion: " + fsHelm.conclude(L, D, LK, DK, V, S));
+                System.out.println("Fuzzy set: " + result);
+                System.out.println("Decoded value: " + def.defuzzify(result));
+                System.out.println("Conclusion: " + fsAccel.conclude(L, D, LK, DK, V, S));
+            }
+
         }
     }
 }
