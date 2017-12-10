@@ -14,6 +14,7 @@ public class Function {
 
     public void loadData(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path));
+
         for (String line : lines) {
             String[] values = line.split("\\s+");
             if (values.length == 3) {
@@ -24,26 +25,30 @@ public class Function {
         }
     }
 
-    private double valueAt(double x, double y, double[] betas) {
-        double inv_e = 1 / Math.exp(Math.pow(x - betas[4], 2));
+    private double valueAt(double x, double y, double[] b) {
+        double inv_e = 1.0 / (1 + Math.exp(Math.pow(x - b[4], 2)));
 
-        return Math.sin(betas[0] + betas[1] * x) +
-                betas[2] * Math.cos(x * (betas[3] + y)) * inv_e;
+        return Math.sin(b[0] + b[1] * x) + b[2] * Math.cos(x * (b[3] + y)) * inv_e;
     }
 
     public List<Double> valuesFor(Chromosome chromosome) {
         List<Double> values = new ArrayList<>();
-        for (int i = 0; i < x1.size(); i++) {
+        for (int i = 0; i < y.size(); i++) {
             values.add(valueAt(x1.get(i), x2.get(i), chromosome.getBetas()));
         }
         return values;
     }
 
     public double totalError(List<Double> evaluated) {
+        if (evaluated.size() != y.size()) {
+            throw new IllegalArgumentException();
+        }
+
         double err = 0;
         for (int i = 0; i < y.size(); i++) {
             err += Math.pow(y.get(i) - evaluated.get(i), 2);
         }
-        return err / evaluated.size();
+
+        return err / y.size();
     }
 }

@@ -24,6 +24,8 @@ public class GA {
                 nextPopulation.add(population.get(0));
             }
 
+//            System.out.println(population.get(0).fitness);
+
             for (int i = nextPopulation.size(); i < popSize; i++) {
                 // selection
                 List<Chromosome> parents = proportionalSimpleChoose(population, 2);
@@ -44,7 +46,7 @@ public class GA {
         System.out.println(sol);
     }
 
-    private void mutate(Chromosome child, double mutationProbability) {
+    public static void mutate(Chromosome child, double mutationProbability) {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             if (random.nextDouble() < mutationProbability) {
@@ -53,7 +55,7 @@ public class GA {
         }
     }
 
-    private Chromosome uniformCrossover(List<Chromosome> parents) {
+    public static Chromosome uniformCrossover(List<Chromosome> parents) {
         if (parents.size() != 2) throw new IllegalArgumentException();
         double[] betas = new double[5];
         for (int i = 0; i < 5; i++) {
