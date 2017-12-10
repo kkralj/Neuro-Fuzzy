@@ -31,7 +31,7 @@ public class Function {
         return Math.sin(b[0] + b[1] * x) + b[2] * Math.cos(x * (b[3] + y)) * inv_e;
     }
 
-    public List<Double> valuesFor(Chromosome chromosome) {
+    private List<Double> valuesFor(Chromosome chromosome) {
         List<Double> values = new ArrayList<>();
         for (int i = 0; i < y.size(); i++) {
             values.add(valueAt(x1.get(i), x2.get(i), chromosome.getBetas()));
@@ -39,7 +39,9 @@ public class Function {
         return values;
     }
 
-    public double totalError(List<Double> evaluated) {
+    public double totalError(Chromosome chr) {
+        List<Double> evaluated = valuesFor(chr);
+
         if (evaluated.size() != y.size()) {
             throw new IllegalArgumentException();
         }
