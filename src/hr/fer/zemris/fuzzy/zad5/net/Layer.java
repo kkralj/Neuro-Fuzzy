@@ -1,10 +1,30 @@
 package hr.fer.zemris.fuzzy.zad5.net;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Layer {
 
-    private int size;
+    private List<Neuron> neurons;
 
-    public Layer(int size) {
-        this.size = size;
+    public Layer(int size, int prevLayerSize) {
+        this.neurons = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            this.neurons.add(new Neuron(prevLayerSize));
+        }
+    }
+
+    public List<Double> forwardPass(List<Double> input) {
+        List<Double> results = new ArrayList<>();
+
+        for (Neuron neuron : neurons) {
+            results.add(neuron.getOutput(input));
+        }
+
+        return results;
+    }
+
+    public List<Neuron> getNeurons() {
+        return neurons;
     }
 }

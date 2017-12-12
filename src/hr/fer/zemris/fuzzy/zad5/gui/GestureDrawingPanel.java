@@ -21,20 +21,6 @@ public class GestureDrawingPanel extends JPanel {
     }
 
     private void init() {
-
-//        addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent mouseEvent) {
-//                System.out.println("Drawing started");
-//                points.clear();
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent mouseEvent) {
-//                System.out.println(points.size());
-//            }
-//        });
-
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
