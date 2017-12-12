@@ -1,14 +1,17 @@
-package hr.fer.zemris.fuzzy.zad5;
+package hr.fer.zemris.fuzzy.zad5.demo;
 
 import hr.fer.zemris.fuzzy.zad5.gui.training.TrainingFrame;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 
-public class Main {
+public class TrainingDemo {
+
+    public static final int M = 30;
+
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> {
-            new TrainingFrame().setVisible(true);
+            new TrainingFrame(M).setVisible(true);
         });
 
     }

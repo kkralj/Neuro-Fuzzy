@@ -15,7 +15,11 @@ public class TrainingFrame extends JFrame {
 
     private GestureDrawingPanel drawingArea;
 
-    public TrainingFrame() {
+    private int M;
+
+    public TrainingFrame(int M) {
+        this.M = M;
+
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -34,29 +38,29 @@ public class TrainingFrame extends JFrame {
         buttonsPanel.setLayout(new FlowLayout());
 
         JButton alpha = new JButton("Classify as Alpha");
-        alpha.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 1));
+        alpha.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 0));
         buttonsPanel.add(alpha);
 
         JButton beta = new JButton("Classify as Beta");
-        beta.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 2));
+        beta.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 1));
         buttonsPanel.add(beta);
 
         JButton gamma = new JButton("Classify as Gamma");
-        gamma.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 3));
+        gamma.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 2));
         buttonsPanel.add(gamma);
 
         JButton delta = new JButton("Classify as Delta");
-        delta.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 4));
+        delta.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 3));
         buttonsPanel.add(delta);
 
         JButton epsilon = new JButton("Classify as Epsilon");
-        epsilon.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 5));
+        epsilon.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 4));
         buttonsPanel.add(epsilon);
     }
 
     private void savePoints(List<DataPoint> points, int y) {
 
-        List<DataPoint> transformedPoints = DataPoint.transformPoints(points, 20);
+        List<DataPoint> transformedPoints = DataPoint.transformPoints(points, M);
 
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("train.txt", true)))) {
             for (DataPoint point : transformedPoints) {
@@ -72,7 +76,7 @@ public class TrainingFrame extends JFrame {
 
     private String oneHot(int y) {
         StringBuilder result = new StringBuilder();
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 0; i < 5; i++) {
             if (i == y) result.append("1");
             else result.append("0");
         }

@@ -17,7 +17,7 @@ public class DataPoint {
     }
 
     private double euclidean_dist(DataPoint point) {
-        return Math.sqrt(this.x * point.x + this.y * point.y);
+        return Math.sqrt(Math.pow(this.x - point.x, 2) + Math.pow(this.y - point.y, 2));
     }
 
     public static List<DataPoint> transformPoints(List<DataPoint> points, int M) {
@@ -45,7 +45,7 @@ public class DataPoint {
 
         double D = 0;
         for (int i = 1; i < points.size(); i++) {
-            D += points.get(i - 1).euclidean_dist(points.get(i));
+            D += points.get(i).euclidean_dist(points.get(i - 1));
         }
 
         List<DataPoint> result = new ArrayList<>();
@@ -57,16 +57,15 @@ public class DataPoint {
 
         for (int i = 1; i < points.size() && cnt < M; ) {
             dist += points.get(i).euclidean_dist(points.get(i - 1));
-            if (dist >= cnt * diff) {
+            while (dist >= cnt * diff && cnt < M) {
                 result.add(points.get(i));
                 cnt++;
-            } else {
-                i++;
             }
+            i++;
         }
 
-        if (result.size() != M) {
-            throw new IllegalArgumentException();
+        while (result.size() < M) {
+            result.add(points.get(points.size() - 1));
         }
 
         return result;
