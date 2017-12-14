@@ -55,14 +55,6 @@ public class HiddenLayer implements Iterable<Neuron> {
         return neurons.iterator();
     }
 
-    public double getDelta(int i, Double tsj) {
-        double value = neurons.get(i).getOutput();
-        double delta = value * (1 - value) * (tsj - value);
-
-        neurons.get(i).setDelta(delta);
-        return delta;
-    }
-
     public double getDelta(int i, HiddenLayer nextLayer) {
         double value = neurons.get(i).getOutput();
         double delta = value * (1 - value);
@@ -74,7 +66,8 @@ public class HiddenLayer implements Iterable<Neuron> {
             sum += neurons.get(i).getWeight(o) * nextNeurons.get(o).getDelta();
         }
 
-        neurons.get(i).setDelta(delta * sum);
+        delta *= sum;
+        neurons.get(i).setDelta(delta);
 
         return delta;
     }
@@ -90,9 +83,15 @@ public class HiddenLayer implements Iterable<Neuron> {
             sum += neurons.get(i).getWeight(o) * nextNeurons.get(o).getDelta();
         }
 
-        neurons.get(i).setDelta(delta * sum);
+        delta *= sum;
+        neurons.get(i).setDelta(delta);
 
         return delta;
     }
 
+    public void swapWeights() {
+        for (Neuron neuron : neurons) {
+            neuron.swapWeight();
+        }
+    }
 }

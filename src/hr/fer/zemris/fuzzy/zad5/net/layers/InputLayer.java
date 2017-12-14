@@ -30,4 +30,27 @@ public class InputLayer {
     public List<Neuron> getNeurons() {
         return neurons;
     }
+
+    public double getDelta(int i, HiddenLayer nextLayer) {
+        double value = neurons.get(i).getOutput();
+        double delta = value * (1 - value);
+
+        double sum = 0;
+
+        List<Neuron> nextNeurons = nextLayer.getNeurons();
+        for (int o = 0; o < nextNeurons.size(); o++) {
+            sum += neurons.get(i).getWeight(o) * nextNeurons.get(o).getDelta();
+        }
+
+        delta *= sum;
+        neurons.get(i).setDelta(delta);
+
+        return delta;
+    }
+
+    public void swapWeights() {
+        for (Neuron neuron : neurons) {
+            neuron.swapWeight();
+        }
+    }
 }

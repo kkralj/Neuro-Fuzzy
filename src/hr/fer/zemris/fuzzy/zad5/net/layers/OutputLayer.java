@@ -49,4 +49,10 @@ public class OutputLayer implements Iterable<Neuron> {
         double value = neurons.get(i).getOutput();
         return value * (1 - value) * (tsj - value);
     }
+
+    public void swapWeights() {
+        for (Neuron neuron : neurons) {
+            neuron.swapWeight();
+        }
+    }
 }

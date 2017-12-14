@@ -10,6 +10,7 @@ import java.util.Random;
 public class Neuron {
 
     private List<Double> weights = new ArrayList<>();
+    private List<Double> tempWeights = new ArrayList<>();
 
     private boolean isInputLayer;
     private double value;
@@ -20,7 +21,8 @@ public class Neuron {
     public Neuron(int size, boolean isInputLayer) {
         this.isInputLayer = isInputLayer;
         for (int i = 0; i < size; i++) {
-            weights.add(isInputLayer ? 1.0 : random.nextDouble());
+            weights.add(isInputLayer ? 1.0 : 1.0);
+            tempWeights.add(isInputLayer ? 1.0 : 1.0);
         }
     }
 
@@ -31,7 +33,7 @@ public class Neuron {
             value += neuron.getOutput() * neuron.getWeight(pos);
         }
 
-        this.value = isInputLayer ? value : sigmoid(value);
+        this.value = sigmoid(value);
     }
 
     private double sigmoid(double x) {
@@ -65,14 +67,18 @@ public class Neuron {
     public void updateWeight(double lr, OutputLayer outputLayer) {
         List<Neuron> neurons = outputLayer.getNeurons();
         for (int i = 0; i < neurons.size(); i++) {
-            weights.set(i, weights.get(i) + lr * this.value * neurons.get(i).getDelta());
+            tempWeights.set(i, tempWeights.get(i) + lr * this.value * neurons.get(i).getDelta());
         }
     }
 
     public void updateWeight(double lr, HiddenLayer nextLayer) {
         List<Neuron> neurons = nextLayer.getNeurons();
         for (int i = 0; i < neurons.size(); i++) {
-            weights.set(i, weights.get(i) + lr * this.value * neurons.get(i).getDelta());
+            tempWeights.set(i, tempWeights.get(i) + lr * this.value * neurons.get(i).getDelta());
         }
+    }
+
+    public void swapWeight() {
+        this.weights = this.tempWeights;
     }
 }

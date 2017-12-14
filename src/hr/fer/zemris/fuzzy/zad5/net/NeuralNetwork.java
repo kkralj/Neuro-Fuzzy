@@ -23,8 +23,9 @@ public class NeuralNetwork {
         for (int i = 0; i < hiddenLayers.length - 1; i++) {
             this.hiddenLayers.add(new HiddenLayer(hiddenLayers[i], hiddenLayers[i + 1]));
         }
+        this.hiddenLayers.add(new HiddenLayer(hiddenLayers[hiddenLayers.length - 1], outputLayer));
 
-        this.outputLayer = new OutputLayer(outputLayer, hiddenLayers[hiddenLayers.length - 1]);
+        this.outputLayer = new OutputLayer(outputLayer, 0);
     }
 
     private double getError() {
@@ -77,7 +78,8 @@ public class NeuralNetwork {
             neurons = layer.getNeurons();
             for (int i = 0; i < neurons.size(); i++) {
                 neurons.get(i).updateWeight(learningRate, outputLayer);
-                neurons.get(i).setDelta(layer.getDelta(i, outputLayer));
+                double delta = layer.getDelta(i, outputLayer);
+                neurons.get(i).setDelta(delta);
             }
 
             // hidden layers
@@ -86,18 +88,34 @@ public class NeuralNetwork {
                 neurons = layer.getNeurons();
                 for (int j = 0; j < neurons.size(); j++) {
                     neurons.get(j).updateWeight(learningRate, hiddenLayers.get(i + 1));
-                    neurons.get(j).setDelta(layer.getDelta(j, outputLayer));
+                    double delta = layer.getDelta(j, hiddenLayers.get(i + 1));
+                    neurons.get(j).setDelta(delta);
                 }
             }
 
+            // input layer -> first hidden
+            neurons = inputLayer.getNeurons();
+            for (int i = 0; i < neurons.size(); i++) {
+                neurons.get(i).updateWeight(learningRate, hiddenLayers.get(0));
+            }
+
+            for (HiddenLayer hiddenLayer : hiddenLayers) {
+                hiddenLayer.swapWeights();
+            }
+            inputLayer.swapWeights();
         }
     }
+
+    double minError = Double.MAX_VALUE;
 
     public void train(int iterations) {
         for (int i = 1; i <= iterations; i++) {
             double error = getError();
-            System.out.println("Iteration: " + i + " error: " + error);
-            backwardPass(1e-3);
+            minError = Math.min(minError, error);
+//            System.out.println("Iteration: " + i + " error: " + error);
+            backwardPass(0.1);
         }
+
+        System.out.println("min err: " + minError);
     }
 }
