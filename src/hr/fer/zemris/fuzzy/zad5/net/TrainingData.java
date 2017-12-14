@@ -9,7 +9,15 @@ import java.util.List;
 public class TrainingData {
 
     private List<List<Double>> data = new ArrayList<>();
-    private List<List<Integer>> correctClasses = new ArrayList<>();
+    private List<List<Double>> correctClasses = new ArrayList<>();
+
+    public TrainingData() {
+    }
+
+    public TrainingData(List<List<Double>> data, List<List<Double>> correctClasses) {
+        this.data = data;
+        this.correctClasses = correctClasses;
+    }
 
     public void fill(String filePath, int M) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(filePath));
@@ -26,21 +34,21 @@ public class TrainingData {
             example = new ArrayList<>();
 
             // one-hot
-            List<Integer> y = convertBack(lines.get(i));
+            List<Double> y = convertBack(lines.get(i));
             correctClasses.add(y);
             i++;
         }
     }
 
-    private List<Integer> convertBack(String s) {
-        List<Integer> y = new ArrayList<>();
+    private List<Double> convertBack(String s) {
+        List<Double> y = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            y.add(0);
+            y.add(0.0);
         }
 
         for (int i = 0; i < 5; i++) {
             if (s.charAt(i) == '1') {
-                y.set(i, 1);
+                y.set(i, 1.0);
             }
         }
         return y;
@@ -50,7 +58,7 @@ public class TrainingData {
         return data;
     }
 
-    public List<List<Integer>> getCorrectClasses() {
+    public List<List<Double>> getCorrectClasses() {
         return correctClasses;
     }
 }
