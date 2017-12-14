@@ -8,18 +8,23 @@ import java.util.List;
 
 public class OutputLayer implements Iterable<Neuron> {
 
-    private List<Neuron> neurons;
+    private int layerSize;
+    private int nextLayerSize;
 
-    public OutputLayer(int size, int prevLayerSize) {
-        this.neurons = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            this.neurons.add(new Neuron(prevLayerSize));
+    private List<Neuron> neurons = new ArrayList<>();
+
+    public OutputLayer(int layerSize, int nextLayerSize) {
+        this.layerSize = layerSize;
+        this.nextLayerSize = nextLayerSize;
+
+        for (int i = 0; i < layerSize; i++) {
+            this.neurons.add(new Neuron(nextLayerSize, false));
         }
     }
 
     public void forwardPass(HiddenLayer layer) {
-        for (Neuron neuron : neurons) {
-            neuron.forwardPass(layer.getOutput());
+        for (int i = 0; i < neurons.size(); i++) {
+            neurons.get(i).forwardPass(i, layer.getNeurons());
         }
     }
 

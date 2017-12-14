@@ -8,24 +8,29 @@ import java.util.List;
 
 public class HiddenLayer implements Iterable<Neuron> {
 
-    private List<Neuron> neurons;
+    private int layerSize;
+    private int nextLayerSize;
 
-    public HiddenLayer(int size, int prevLayerSize) {
-        this.neurons = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            this.neurons.add(new Neuron(prevLayerSize));
+    private List<Neuron> neurons = new ArrayList<>();
+
+    public HiddenLayer(int layerSize, int nextLayerSize) {
+        this.layerSize = layerSize;
+        this.nextLayerSize = nextLayerSize;
+
+        for (int i = 0; i < layerSize; i++) {
+            this.neurons.add(new Neuron(nextLayerSize, false));
         }
     }
 
     public void forwardPass(HiddenLayer layer) {
-        for (Neuron neuron : neurons) {
-            neuron.forwardPass(layer.getOutput());
+        for (int i = 0; i < neurons.size(); i++) {
+            neurons.get(i).forwardPass(i, layer.getNeurons());
         }
     }
 
-    public void forwardPass(InputLayer layer) {
-        for (Neuron neuron : neurons) {
-            neuron.forwardPass(layer.getValues());
+    public void forwardPass(InputLayer prevLayer) {
+        for (int i = 0; i < neurons.size(); i++) {
+            neurons.get(i).forwardPass(i, prevLayer.getNeurons());
         }
     }
 
@@ -58,16 +63,35 @@ public class HiddenLayer implements Iterable<Neuron> {
         return delta;
     }
 
-    public double getDelta(int i, HiddenLayer next) {
+    public double getDelta(int i, HiddenLayer nextLayer) {
         double value = neurons.get(i).getOutput();
         double delta = value * (1 - value);
 
-        List<Neuron> nextNeurons = next.getNeurons();
-        for (Neuron nextNeuron : nextNeurons) {
-            delta *= nextNeuron.getWeight(i) * nextNeuron.getDelta();
+        double sum = 0;
+
+        List<Neuron> nextNeurons = nextLayer.getNeurons();
+        for (int o = 0; o < nextNeurons.size(); o++) {
+            sum += neurons.get(i).getWeight(o) * nextNeurons.get(o).getDelta();
         }
 
-        neurons.get(i).setDelta(delta);
+        neurons.get(i).setDelta(delta * sum);
+
+        return delta;
+    }
+
+    public double getDelta(int i, OutputLayer nextLayer) {
+        double value = neurons.get(i).getOutput();
+        double delta = value * (1 - value);
+
+        double sum = 0;
+
+        List<Neuron> nextNeurons = nextLayer.getNeurons();
+        for (int o = 0; o < nextNeurons.size(); o++) {
+            sum += neurons.get(i).getWeight(o) * nextNeurons.get(o).getDelta();
+        }
+
+        neurons.get(i).setDelta(delta * sum);
+
         return delta;
     }
 

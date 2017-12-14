@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NeuralNetDummy {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         List<List<Double>> data = new ArrayList<>();
         List<List<Double>> correct = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class NeuralNetDummy {
         int outputLayer = 1;
 
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(100);
+        nn.train(100000);
     }
 
     private static List<Double> createDummyList(double x) {

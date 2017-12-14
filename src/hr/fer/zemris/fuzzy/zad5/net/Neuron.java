@@ -1,31 +1,34 @@
 package hr.fer.zemris.fuzzy.zad5.net;
 
+import hr.fer.zemris.fuzzy.zad5.net.layers.HiddenLayer;
+import hr.fer.zemris.fuzzy.zad5.net.layers.OutputLayer;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Neuron {
 
     private List<Double> weights = new ArrayList<>();
+
+    private boolean isInputLayer;
     private double value;
     private double delta;
 
-    public Neuron(int size) {
+    public Neuron(int size, boolean isInputLayer) {
+        this.isInputLayer = isInputLayer;
         for (int i = 0; i < size; i++) {
             weights.add(0.0);
         }
     }
 
-    public void forwardPass(List<Double> input) {
-        if (input.size() != weights.size()) {
-            throw new IllegalArgumentException();
-        }
-
+    public void forwardPass(int pos, List<Neuron> neurons) {
         double value = 0;
-        for (int i = 0; i < weights.size(); i++) {
-            value += weights.get(i) * input.get(i);
+
+        for (Neuron neuron : neurons) {
+            value += neuron.getOutput() * neuron.getWeight(pos);
         }
 
-        this.value = sigmoid(value);
+        this.value = isInputLayer ? value : sigmoid(value);
     }
 
     private double sigmoid(double x) {
@@ -34,10 +37,6 @@ public class Neuron {
 
     public double getOutput() {
         return value;
-    }
-
-    public List<Double> getWeights() {
-        return weights;
     }
 
     public double getWeight(int i) {
@@ -54,5 +53,23 @@ public class Neuron {
 
     public double getDelta() {
         return delta;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public void updateWeight(double lr, OutputLayer outputLayer, double output) {
+        List<Neuron> neurons = outputLayer.getNeurons();
+        for (int i = 0; i < neurons.size(); i++) {
+            weights.set(i, weights.get(i) + lr * output * neurons.get(i).getDelta());
+        }
+    }
+
+    public void updateWeight(double lr, HiddenLayer nextLayer, double output) {
+        List<Neuron> neurons = nextLayer.getNeurons();
+        for (int i = 0; i < neurons.size(); i++) {
+            weights.set(i, weights.get(i) + lr * output * neurons.get(i).getDelta());
+        }
     }
 }

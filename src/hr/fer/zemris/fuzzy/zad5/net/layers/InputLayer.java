@@ -1,41 +1,33 @@
 package hr.fer.zemris.fuzzy.zad5.net.layers;
 
+import hr.fer.zemris.fuzzy.zad5.net.Neuron;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class InputLayer {
 
-    private int size;
-    private List<Double> biases = new ArrayList<>();
-    private List<Double> values = new ArrayList<>();
+    private int layerSize;
+    private int nextLayerSize;
 
-    public InputLayer(int size) {
-        this.size = size;
-        for (int i = 0; i < size; i++) {
-            biases.add(0.0);
-            values.add(0.0);
+    private List<Neuron> neurons = new ArrayList<>();
+
+    public InputLayer(int layerSize, int nextLayerSize) {
+        this.layerSize = layerSize;
+        this.nextLayerSize = nextLayerSize;
+
+        for (int i = 0; i < layerSize; i++) {
+            this.neurons.add(new Neuron(nextLayerSize, true));
         }
     }
 
     public void forwardPass(List<Double> input) {
-        if (input.size() != this.size) {
-            throw new IllegalArgumentException();
-        }
-
-        for (int i = 0; i < biases.size(); i++) {
-            values.set(i, biases.get(i) + input.get(i));
+        for (int i = 0; i < input.size(); i++) {
+            neurons.get(i).setValue(input.get(i));
         }
     }
 
-    public List<Double> getValues() {
-        return values;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public List<Double> getOutput() {
-        return values;
+    public List<Neuron> getNeurons() {
+        return neurons;
     }
 }
