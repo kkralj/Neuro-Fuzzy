@@ -18,7 +18,7 @@ public class OutputLayer implements Iterable<Neuron> {
         this.nextLayerSize = nextLayerSize;
 
         for (int i = 0; i < layerSize; i++) {
-            this.neurons.add(new Neuron(nextLayerSize, false));
+            this.neurons.add(new Neuron(nextLayerSize));
         }
     }
 

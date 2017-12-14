@@ -5,7 +5,7 @@ import hr.fer.zemris.fuzzy.zad5.net.TrainingData;
 
 import java.io.IOException;
 
-public class NeuralNetDemo {
+public class NeuralNetTrain {
     public static void main(String[] args) throws IOException {
 
         int inputLayer = 2 * TrainingDemo.M;
@@ -16,8 +16,8 @@ public class NeuralNetDemo {
         trainingData.fill("train.txt", TrainingDemo.M);
 
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
+        nn.train(100_000, 0.6, false);
 
-        nn.train(100);
 
     }
 }

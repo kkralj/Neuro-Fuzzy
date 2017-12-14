@@ -41,7 +41,7 @@ public class NeuralNetwork {
             }
         }
 
-        return 2 * error / input.size();
+        return error;
     }
 
     private List<Double> forwardPass(List<Double> input) {
@@ -108,28 +108,34 @@ public class NeuralNetwork {
         }
     }
 
-    public void train(int iterations) {
-        double minError = Double.MAX_VALUE;
-        for (int i = 1; i <= iterations; i++) {
-            double error = getError();
-            minError = Math.min(minError, error);
-            System.out.println("Iteration: " + i + " error: " + error);
-            backwardPass(0.6);
-        }
+    public List<Double> predict(List<Double> input) {
+        return forwardPass(input);
+    }
 
-        System.out.println("min err: " + minError);
+    public void train(int iterations, double learningRate, boolean printIterations) {
+        double error = Double.MAX_VALUE;
 
-        System.out.println("Input layer");
-        for (Neuron n : inputLayer.getNeurons()) {
-            System.out.println(n.getWeights());
-        }
-        System.out.println("Hidden layers");
-        for (HiddenLayer hl : hiddenLayers) {
-            for (Neuron n : hl.getNeurons()) {
-                System.out.println(n.getWeights());
+        for (int i = 1; i <= iterations && error > 1e-4; i++) {
+            error = getError();
+            if (printIterations) {
+                System.out.println("Iteration: " + i + " error: " + error);
             }
+            backwardPass(learningRate);
         }
-        System.out.println();
+
+        System.out.println("Error: " + error);
+
+//        System.out.println("Input layer");
+//        for (Neuron n : inputLayer.getNeurons()) {
+//            System.out.println(n.getWeights());
+//        }
+//        System.out.println("Hidden layers");
+//        for (HiddenLayer hl : hiddenLayers) {
+//            for (Neuron n : hl.getNeurons()) {
+//                System.out.println(n.getWeights());
+//            }
+//        }
+//        System.out.println();
     }
 
 

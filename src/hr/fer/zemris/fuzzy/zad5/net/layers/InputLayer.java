@@ -17,7 +17,7 @@ public class InputLayer {
         this.nextLayerSize = nextLayerSize;
 
         for (int i = 0; i < layerSize; i++) {
-            this.neurons.add(new Neuron(nextLayerSize, true));
+            this.neurons.add(new Neuron(nextLayerSize));
         }
     }
 

@@ -9,27 +9,24 @@ import java.util.Random;
 
 public class Neuron {
 
+    private static Random random = new Random();
+
     private List<Double> weights = new ArrayList<>();
+    private List<Double> tempWeights;
+
     private List<Double> biases = new ArrayList<>();
+    private List<Double> tempBiases;
 
-    private List<Double> tempBiases = new ArrayList<>();
-    private List<Double> tempWeights = new ArrayList<>();
-
-    private boolean isInputLayer;
     private double value;
     private double delta;
 
-    private static Random random = new Random();
-
-    public Neuron(int size, boolean isInputLayer) {
-        this.isInputLayer = isInputLayer;
+    public Neuron(int size) {
         for (int i = 0; i < size; i++) {
-            double randWeight = -2 + 4 * random.nextDouble();
-            weights.add(randWeight);
-            tempWeights.add(randWeight);
-            biases.add(0.);
-            tempBiases.add(0.);
+            weights.add(-1 + 2 * random.nextDouble());
+            biases.add(random.nextDouble());
         }
+        tempWeights = new ArrayList<>(weights);
+        tempBiases = new ArrayList<>(biases);
     }
 
     public void forwardPass(int pos, List<Neuron> neurons) {
@@ -52,10 +49,6 @@ public class Neuron {
 
     public double getWeight(int i) {
         return weights.get(i);
-    }
-
-    public List<Double> getWeights() {
-        return weights;
     }
 
     public void setWeight(int i, double val) {
