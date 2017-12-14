@@ -22,8 +22,8 @@ public class Neuron {
 
     public Neuron(int size) {
         for (int i = 0; i < size; i++) {
-            weights.add(-1 + 2 * random.nextDouble());
-            biases.add(random.nextDouble());
+            weights.add(-5 + 10 * random.nextDouble());
+            biases.add(-5 + 10 * random.nextDouble());
         }
         tempWeights = new ArrayList<>(weights);
         tempBiases = new ArrayList<>(biases);
@@ -57,6 +57,10 @@ public class Neuron {
 
     public void setDelta(double delta) {
         this.delta = delta;
+    }
+
+    public List<Double> getWeights() {
+        return weights;
     }
 
     public double getDelta() {

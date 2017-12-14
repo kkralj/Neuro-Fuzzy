@@ -47,9 +47,9 @@ public class PredictionFrame extends JFrame {
 
     private void predict(java.util.List<DataPoint> points) {
         List<DataPoint> transformedPoints = DataPoint.transformPoints(points, M);
-        System.out.println(points.size());
         List<Double> prediction = nn.predict(DataPoint.flatten(transformedPoints));
 
+        System.out.println(prediction);
         JOptionPane.showMessageDialog(null, prediction);
 
         drawingArea.clear();

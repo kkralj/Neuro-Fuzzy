@@ -101,10 +101,12 @@ public class NeuralNetwork {
                 neurons.get(i).setDelta(delta);
             }
 
-            for (HiddenLayer hiddenLayer : hiddenLayers) {
-                hiddenLayer.swapWeights();
+            if (dataIndex % 100 == 0) {
+                for (HiddenLayer hiddenLayer : hiddenLayers) {
+                    hiddenLayer.swapWeights();
+                }
+                inputLayer.swapWeights();
             }
-            inputLayer.swapWeights();
         }
     }
 
@@ -125,17 +127,17 @@ public class NeuralNetwork {
 
         System.out.println("Error: " + error);
 
-//        System.out.println("Input layer");
-//        for (Neuron n : inputLayer.getNeurons()) {
-//            System.out.println(n.getWeights());
-//        }
-//        System.out.println("Hidden layers");
-//        for (HiddenLayer hl : hiddenLayers) {
-//            for (Neuron n : hl.getNeurons()) {
-//                System.out.println(n.getWeights());
-//            }
-//        }
-//        System.out.println();
+        System.out.println("Input layer");
+        for (Neuron n : inputLayer.getNeurons()) {
+            System.out.println(n.getWeights());
+        }
+        System.out.println("Hidden layers");
+        for (HiddenLayer hl : hiddenLayers) {
+            for (Neuron n : hl.getNeurons()) {
+                System.out.println(n.getWeights());
+            }
+        }
+        System.out.println();
     }
 
 
