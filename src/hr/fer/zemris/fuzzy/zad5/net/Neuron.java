@@ -10,6 +10,9 @@ import java.util.Random;
 public class Neuron {
 
     private List<Double> weights = new ArrayList<>();
+    private List<Double> biases = new ArrayList<>();
+
+    private List<Double> tempBiases = new ArrayList<>();
     private List<Double> tempWeights = new ArrayList<>();
 
     private boolean isInputLayer;
@@ -21,8 +24,11 @@ public class Neuron {
     public Neuron(int size, boolean isInputLayer) {
         this.isInputLayer = isInputLayer;
         for (int i = 0; i < size; i++) {
-            weights.add(isInputLayer ? 1.0 : 1.0);
-            tempWeights.add(isInputLayer ? 1.0 : 1.0);
+            double randWeight = -2 + 4 * random.nextDouble();
+            weights.add(randWeight);
+            tempWeights.add(randWeight);
+            biases.add(0.);
+            tempBiases.add(0.);
         }
     }
 
@@ -30,7 +36,7 @@ public class Neuron {
         double value = 0;
 
         for (Neuron neuron : neurons) {
-            value += neuron.getOutput() * neuron.getWeight(pos);
+            value += neuron.getOutput() * neuron.getWeight(pos) + neuron.biases.get(pos);
         }
 
         this.value = sigmoid(value);
@@ -46,6 +52,10 @@ public class Neuron {
 
     public double getWeight(int i) {
         return weights.get(i);
+    }
+
+    public List<Double> getWeights() {
+        return weights;
     }
 
     public void setWeight(int i, double val) {
@@ -68,17 +78,21 @@ public class Neuron {
         List<Neuron> neurons = outputLayer.getNeurons();
         for (int i = 0; i < neurons.size(); i++) {
             tempWeights.set(i, tempWeights.get(i) + lr * this.value * neurons.get(i).getDelta());
+            tempBiases.set(i, tempBiases.get(i) + lr * neurons.get(i).getDelta());
         }
     }
 
     public void updateWeight(double lr, HiddenLayer nextLayer) {
         List<Neuron> neurons = nextLayer.getNeurons();
+        double val = this.value;
         for (int i = 0; i < neurons.size(); i++) {
-            tempWeights.set(i, tempWeights.get(i) + lr * this.value * neurons.get(i).getDelta());
+            tempWeights.set(i, tempWeights.get(i) + lr * val * neurons.get(i).getDelta());
+            tempBiases.set(i, tempBiases.get(i) + lr * neurons.get(i).getDelta());
         }
     }
 
     public void swapWeight() {
         this.weights = this.tempWeights;
+        this.biases = this.tempBiases;
     }
 }

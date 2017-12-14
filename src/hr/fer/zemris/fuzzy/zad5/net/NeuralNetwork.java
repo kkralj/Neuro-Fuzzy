@@ -41,7 +41,7 @@ public class NeuralNetwork {
             }
         }
 
-        return error;
+        return 2 * error / input.size();
     }
 
     private List<Double> forwardPass(List<Double> input) {
@@ -78,7 +78,7 @@ public class NeuralNetwork {
             neurons = layer.getNeurons();
             for (int i = 0; i < neurons.size(); i++) {
                 neurons.get(i).updateWeight(learningRate, outputLayer);
-                double delta = layer.getDelta(i, outputLayer);
+                double delta = layer.getDelta(i, outputLayer.getNeurons());
                 neurons.get(i).setDelta(delta);
             }
 
@@ -88,7 +88,7 @@ public class NeuralNetwork {
                 neurons = layer.getNeurons();
                 for (int j = 0; j < neurons.size(); j++) {
                     neurons.get(j).updateWeight(learningRate, hiddenLayers.get(i + 1));
-                    double delta = layer.getDelta(j, hiddenLayers.get(i + 1));
+                    double delta = layer.getDelta(j, hiddenLayers.get(i + 1).getNeurons());
                     neurons.get(j).setDelta(delta);
                 }
             }
@@ -97,6 +97,8 @@ public class NeuralNetwork {
             neurons = inputLayer.getNeurons();
             for (int i = 0; i < neurons.size(); i++) {
                 neurons.get(i).updateWeight(learningRate, hiddenLayers.get(0));
+                double delta = inputLayer.getDelta(i, hiddenLayers.get(0));
+                neurons.get(i).setDelta(delta);
             }
 
             for (HiddenLayer hiddenLayer : hiddenLayers) {
@@ -106,16 +108,29 @@ public class NeuralNetwork {
         }
     }
 
-    double minError = Double.MAX_VALUE;
-
     public void train(int iterations) {
+        double minError = Double.MAX_VALUE;
         for (int i = 1; i <= iterations; i++) {
             double error = getError();
             minError = Math.min(minError, error);
-//            System.out.println("Iteration: " + i + " error: " + error);
-            backwardPass(0.1);
+            System.out.println("Iteration: " + i + " error: " + error);
+            backwardPass(0.6);
         }
 
         System.out.println("min err: " + minError);
+
+        System.out.println("Input layer");
+        for (Neuron n : inputLayer.getNeurons()) {
+            System.out.println(n.getWeights());
+        }
+        System.out.println("Hidden layers");
+        for (HiddenLayer hl : hiddenLayers) {
+            for (Neuron n : hl.getNeurons()) {
+                System.out.println(n.getWeights());
+            }
+        }
+        System.out.println();
     }
+
+
 }
