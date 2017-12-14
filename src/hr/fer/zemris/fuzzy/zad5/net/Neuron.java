@@ -5,6 +5,7 @@ import hr.fer.zemris.fuzzy.zad5.net.layers.OutputLayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Neuron {
 
@@ -14,10 +15,12 @@ public class Neuron {
     private double value;
     private double delta;
 
+    private static Random random = new Random();
+
     public Neuron(int size, boolean isInputLayer) {
         this.isInputLayer = isInputLayer;
         for (int i = 0; i < size; i++) {
-            weights.add(0.0);
+            weights.add(isInputLayer ? 1.0 : random.nextDouble());
         }
     }
 
@@ -59,17 +62,17 @@ public class Neuron {
         this.value = value;
     }
 
-    public void updateWeight(double lr, OutputLayer outputLayer, double output) {
+    public void updateWeight(double lr, OutputLayer outputLayer) {
         List<Neuron> neurons = outputLayer.getNeurons();
         for (int i = 0; i < neurons.size(); i++) {
-            weights.set(i, weights.get(i) + lr * output * neurons.get(i).getDelta());
+            weights.set(i, weights.get(i) + lr * this.value * neurons.get(i).getDelta());
         }
     }
 
-    public void updateWeight(double lr, HiddenLayer nextLayer, double output) {
+    public void updateWeight(double lr, HiddenLayer nextLayer) {
         List<Neuron> neurons = nextLayer.getNeurons();
         for (int i = 0; i < neurons.size(); i++) {
-            weights.set(i, weights.get(i) + lr * output * neurons.get(i).getDelta());
+            weights.set(i, weights.get(i) + lr * this.value * neurons.get(i).getDelta());
         }
     }
 }
