@@ -1,7 +1,6 @@
-package hr.fer.zemris.fuzzy.zad5.gui.training;
+package hr.fer.zemris.fuzzy.zad5.gui;
 
 import hr.fer.zemris.fuzzy.zad5.DataPoint;
-import hr.fer.zemris.fuzzy.zad5.gui.GestureDrawingPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,6 +55,10 @@ public class TrainingFrame extends JFrame {
         JButton epsilon = new JButton("Classify as Epsilon");
         epsilon.addActionListener(actionEvent -> savePoints(drawingArea.getPoints(), 4));
         buttonsPanel.add(epsilon);
+
+        JButton clear = new JButton("Clear");
+        buttonsPanel.add(clear);
+        clear.addActionListener(actionEvent -> drawingArea.clear());
     }
 
     private void savePoints(List<DataPoint> points, int y) {

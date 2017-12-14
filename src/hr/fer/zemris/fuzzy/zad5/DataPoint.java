@@ -71,6 +71,15 @@ public class DataPoint {
         return result;
     }
 
+    public static List<Double> flatten(List<DataPoint> points) {
+        List<Double> result = new ArrayList<>();
+        for (DataPoint point : points) {
+            result.add(point.x);
+            result.add(point.y);
+        }
+        return result;
+    }
+
     public double getX() {
         return x;
     }

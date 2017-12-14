@@ -11,12 +11,11 @@ import java.util.List;
 
 public class GestureDrawingPanel extends JPanel {
 
-    private List<DataPoint> points = new ArrayList<>();
+    private List<Point> points = new ArrayList<>();
 
     public GestureDrawingPanel() {
         this.setOpaque(true);
         this.setBackground(Color.WHITE);
-
         init();
     }
 
@@ -25,24 +24,33 @@ public class GestureDrawingPanel extends JPanel {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
                 super.mouseDragged(mouseEvent);
-                Point p = mouseEvent.getPoint();
-                Graphics g = getGraphics();
-                g.setColor(Color.blue);
-                g.fillOval(p.x, p.y, 5, 5);
-                g.dispose();
-
-                points.add(new DataPoint(p.x, p.y));
+                points.add(mouseEvent.getPoint());
+                repaint();
+                revalidate();
             }
         });
     }
 
+    @Override
+    public void paint(Graphics graphics) {
+        super.paint(graphics);
+        graphics.setColor(Color.blue);
+        for (Point point : points) {
+            graphics.fillOval(point.x, point.y, 5, 5);
+        }
+    }
+
     public void clear() {
-        this.points.clear();
-        this.revalidate();
-        this.repaint();
+        points.clear();
+        repaint();
+        revalidate();
     }
 
     public List<DataPoint> getPoints() {
-        return points;
+        List<DataPoint> dataPoints = new ArrayList<>();
+        for (Point point : points) {
+            dataPoints.add(new DataPoint(point.x, point.y));
+        }
+        return dataPoints;
     }
 }

@@ -112,12 +112,12 @@ public class NeuralNetwork {
         return forwardPass(input);
     }
 
-    public void train(int iterations, double learningRate, boolean printIterations) {
+    public void train(int iterations, double learningRate, int printIterations) {
         double error = Double.MAX_VALUE;
 
         for (int i = 1; i <= iterations && error > 1e-4; i++) {
             error = getError();
-            if (printIterations) {
+            if (printIterations > 0 && i % printIterations == 0) {
                 System.out.println("Iteration: " + i + " error: " + error);
             }
             backwardPass(learningRate);

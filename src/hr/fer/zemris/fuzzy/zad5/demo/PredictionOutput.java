@@ -1,0 +1,29 @@
+package hr.fer.zemris.fuzzy.zad5.demo;
+
+import hr.fer.zemris.fuzzy.zad5.gui.PredictionFrame;
+import hr.fer.zemris.fuzzy.zad5.net.NeuralNetwork;
+import hr.fer.zemris.fuzzy.zad5.net.TrainingData;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+public class PredictionOutput {
+
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException, IOException {
+        int inputLayer = 2 * DataInput.M;
+        int[] hiddenLayers = new int[]{25, 35, 40, 15};
+        int outputLayer = 5;
+
+        TrainingData trainingData = new TrainingData();
+        trainingData.fill("train.txt", DataInput.M);
+
+        NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
+        nn.train(100, 0.5, 1000);
+
+        SwingUtilities.invokeAndWait(() -> {
+            new PredictionFrame(DataInput.M, nn).setVisible(true);
+        });
+
+    }
+}
