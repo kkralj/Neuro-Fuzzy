@@ -4,19 +4,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TrainingData {
 
-    private List<List<Double>> data = new ArrayList<>();
-    private List<List<Double>> correctClasses = new ArrayList<>();
+    private List<Data> data = new ArrayList<>();
 
     public TrainingData() {
     }
 
     public TrainingData(List<List<Double>> data, List<List<Double>> correctClasses) {
-        this.data = data;
-        this.correctClasses = correctClasses;
+        for (int i = 0; i < data.size(); i++) {
+            this.data.add(new Data(data.get(i), correctClasses.get(i)));
+        }
+        Collections.shuffle(data);
     }
 
     public void fill(String filePath, int M) throws IOException {
@@ -30,14 +32,15 @@ public class TrainingData {
                 example.add(Double.parseDouble(values[0]));
                 example.add(Double.parseDouble(values[1]));
             }
-            data.add(example);
-            example = new ArrayList<>();
-
             // one-hot
             List<Double> y = convertBack(lines.get(i));
-            correctClasses.add(y);
+            data.add(new Data(example, y));
+
+            example = new ArrayList<>();
             i++;
         }
+
+        Collections.shuffle(data);
     }
 
     private List<Double> convertBack(String s) {
@@ -55,10 +58,36 @@ public class TrainingData {
     }
 
     public List<List<Double>> getData() {
-        return data;
+        List<List<Double>> dataList = new ArrayList<>();
+        for (Data d : data) {
+            dataList.add(d.getInput());
+        }
+        return dataList;
     }
 
     public List<List<Double>> getCorrectClasses() {
-        return correctClasses;
+        List<List<Double>> classes = new ArrayList<>();
+        for (Data d : data) {
+            classes.add(d.getOutput());
+        }
+        return classes;
+    }
+
+    private static class Data {
+        private List<Double> input;
+        private List<Double> output;
+
+        Data(List<Double> input, List<Double> output) {
+            this.input = input;
+            this.output = output;
+        }
+
+        List<Double> getInput() {
+            return input;
+        }
+
+        List<Double> getOutput() {
+            return output;
+        }
     }
 }

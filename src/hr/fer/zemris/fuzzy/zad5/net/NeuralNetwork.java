@@ -1,31 +1,55 @@
 package hr.fer.zemris.fuzzy.zad5.net;
 
-import hr.fer.zemris.fuzzy.zad5.net.layers.HiddenLayer;
-import hr.fer.zemris.fuzzy.zad5.net.layers.InputLayer;
-import hr.fer.zemris.fuzzy.zad5.net.layers.OutputLayer;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class NeuralNetwork {
 
+    private static final double EPS = 1e-4;
+
     private TrainingData trainingData;
 
-    private InputLayer inputLayer;
-    private List<HiddenLayer> hiddenLayers = new ArrayList<>();
-    private OutputLayer outputLayer;
+    private List<Layer> layers = new ArrayList<>();
+
 
     public NeuralNetwork(TrainingData trainingData, int inputLayer, int[] hiddenLayers, int outputLayer) {
         this.trainingData = trainingData;
 
-        this.inputLayer = new InputLayer(inputLayer, hiddenLayers[0]);
+        // input layer
+        layers.add(new Layer(inputLayer, hiddenLayers[0]));
 
+        // hidden layers
         for (int i = 0; i < hiddenLayers.length - 1; i++) {
-            this.hiddenLayers.add(new HiddenLayer(hiddenLayers[i], hiddenLayers[i + 1]));
+            layers.add(new Layer(hiddenLayers[i], hiddenLayers[i + 1]));
         }
-        this.hiddenLayers.add(new HiddenLayer(hiddenLayers[hiddenLayers.length - 1], outputLayer));
+        layers.add(new Layer(hiddenLayers[hiddenLayers.length - 1], outputLayer));
 
-        this.outputLayer = new OutputLayer(outputLayer, 0);
+        // output layer
+        layers.add(new Layer(outputLayer, 0));
+    }
+
+    public List<Double> predict(List<Double> input) {
+        return forwardPass(input);
+    }
+
+    public void train(int iterations, int batchSize, double learningRate, int printIterations, boolean printWeights) {
+        double error = Double.MAX_VALUE;
+
+        for (int i = 1; i <= iterations && error > EPS; i++) {
+            error = getError();
+
+            if (printIterations > 0 && i % printIterations == 0) {
+                System.out.println("Iteration: " + i + " Error: " + error);
+            }
+
+            backwardPass(learningRate, batchSize);
+        }
+
+        System.out.println("Error: " + error);
+
+        if (printWeights) {
+            printWeights();
+        }
     }
 
     private double getError() {
@@ -41,24 +65,20 @@ public class NeuralNetwork {
             }
         }
 
-        return error;
+        return error / input.size();
     }
 
     private List<Double> forwardPass(List<Double> input) {
-        inputLayer.forwardPass(input);
+        layers.get(0).forwardPass(input);
 
-        hiddenLayers.get(0).forwardPass(inputLayer);
-
-        for (int i = 1; i < hiddenLayers.size(); i++) {
-            hiddenLayers.get(i).forwardPass(hiddenLayers.get(i - 1));
+        for (int i = 1; i < layers.size(); i++) {
+            layers.get(i).forwardPass(layers.get(i - 1));
         }
 
-        outputLayer.forwardPass(hiddenLayers.get(hiddenLayers.size() - 1));
-
-        return outputLayer.getOutput();
+        return layers.get(layers.size() - 1).getOutput();
     }
 
-    private void backwardPass(double learningRate) {
+    private void backwardPass(double learningRate, int batchSize) {
         for (int dataIndex = 0; dataIndex < trainingData.getData().size(); dataIndex++) {
 
             List<Double> input = trainingData.getData().get(dataIndex);
@@ -66,79 +86,33 @@ public class NeuralNetwork {
 
             forwardPass(input);
 
-            // output layer
-            List<Neuron> neurons = outputLayer.getNeurons();
-            for (int j = 0; j < neurons.size(); j++) {
-                double delta = outputLayer.getDelta(j, realOutput.get(j));
-                neurons.get(j).setDelta(delta);
+            // update deltas
+            layers.get(layers.size() - 1).updateDeltas(realOutput);
+            for (int i = layers.size() - 2; i >= 0; i--) {
+                layers.get(i).updateDeltas(layers.get(i + 1));
             }
 
-            // last hidden -> output layer
-            HiddenLayer layer = hiddenLayers.get(hiddenLayers.size() - 1);
-            neurons = layer.getNeurons();
-            for (int i = 0; i < neurons.size(); i++) {
-                neurons.get(i).updateWeight(learningRate, outputLayer);
-                double delta = layer.getDelta(i, outputLayer.getNeurons());
-                neurons.get(i).setDelta(delta);
+            // update weights
+            for (int i = layers.size() - 2; i >= 0; i--) {
+                layers.get(i).updateWeights(learningRate, layers.get(i + 1));
             }
 
-            // hidden layers
-            for (int i = hiddenLayers.size() - 2; i >= 0; i--) {
-                layer = hiddenLayers.get(i);
-                neurons = layer.getNeurons();
-                for (int j = 0; j < neurons.size(); j++) {
-                    neurons.get(j).updateWeight(learningRate, hiddenLayers.get(i + 1));
-                    double delta = layer.getDelta(j, hiddenLayers.get(i + 1).getNeurons());
-                    neurons.get(j).setDelta(delta);
+            if (dataIndex > 0 && dataIndex % batchSize == 0) {
+                for (Layer layer : layers) {
+                    layer.swapWeights();
                 }
-            }
-
-            // input layer -> first hidden
-            neurons = inputLayer.getNeurons();
-            for (int i = 0; i < neurons.size(); i++) {
-                neurons.get(i).updateWeight(learningRate, hiddenLayers.get(0));
-                double delta = inputLayer.getDelta(i, hiddenLayers.get(0));
-                neurons.get(i).setDelta(delta);
-            }
-
-            if (dataIndex % 100 == 0) {
-                for (HiddenLayer hiddenLayer : hiddenLayers) {
-                    hiddenLayer.swapWeights();
-                }
-                inputLayer.swapWeights();
             }
         }
     }
 
-    public List<Double> predict(List<Double> input) {
-        return forwardPass(input);
-    }
-
-    public void train(int iterations, double learningRate, int printIterations) {
-        double error = Double.MAX_VALUE;
-
-        for (int i = 1; i <= iterations && error > 1e-4; i++) {
-            error = getError();
-            if (printIterations > 0 && i % printIterations == 0) {
-                System.out.println("Iteration: " + i + " error: " + error);
-            }
-            backwardPass(learningRate);
-        }
-
-        System.out.println("Error: " + error);
-
-        System.out.println("Input layer");
-        for (Neuron n : inputLayer.getNeurons()) {
-            System.out.println(n.getWeights());
-        }
-        System.out.println("Hidden layers");
-        for (HiddenLayer hl : hiddenLayers) {
-            for (Neuron n : hl.getNeurons()) {
+    private void printWeights() {
+        System.out.println("Layer weights:");
+        for (Layer layer : layers) {
+            for (Neuron n : layer.getNeurons()) {
                 System.out.println(n.getWeights());
             }
         }
         System.out.println();
     }
-
 
 }

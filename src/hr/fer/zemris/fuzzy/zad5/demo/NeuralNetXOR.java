@@ -20,12 +20,12 @@ public class NeuralNetXOR {
         }
 
         int inputLayer = 2;
-        int[] hiddenLayers = new int[]{2, 5};
+        int[] hiddenLayers = new int[]{6, 6};
         int outputLayer = 1;
 
         TrainingData trainingData = new TrainingData(data, correct);
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(100_000, 0.75, 1000);
+        nn.train(100_000, 1,1, 1000, false);
 
         for (double[] input : inputs) {
             System.out.println(nn.predict(createDummyList(input)));

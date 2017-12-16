@@ -1,8 +1,5 @@
 package hr.fer.zemris.fuzzy.zad5.net;
 
-import hr.fer.zemris.fuzzy.zad5.net.layers.HiddenLayer;
-import hr.fer.zemris.fuzzy.zad5.net.layers.OutputLayer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -51,10 +48,6 @@ public class Neuron {
         return weights.get(i);
     }
 
-    public void setWeight(int i, double val) {
-        weights.set(i, val);
-    }
-
     public void setDelta(double delta) {
         this.delta = delta;
     }
@@ -71,19 +64,10 @@ public class Neuron {
         this.value = value;
     }
 
-    public void updateWeight(double lr, OutputLayer outputLayer) {
-        List<Neuron> neurons = outputLayer.getNeurons();
+    public void updateWeight(double lr, Layer nextLayer) {
+        List<Neuron> neurons = nextLayer.getNeurons();
         for (int i = 0; i < neurons.size(); i++) {
             tempWeights.set(i, tempWeights.get(i) + lr * this.value * neurons.get(i).getDelta());
-            tempBiases.set(i, tempBiases.get(i) + lr * neurons.get(i).getDelta());
-        }
-    }
-
-    public void updateWeight(double lr, HiddenLayer nextLayer) {
-        List<Neuron> neurons = nextLayer.getNeurons();
-        double val = this.value;
-        for (int i = 0; i < neurons.size(); i++) {
-            tempWeights.set(i, tempWeights.get(i) + lr * val * neurons.get(i).getDelta());
             tempBiases.set(i, tempBiases.get(i) + lr * neurons.get(i).getDelta());
         }
     }

@@ -12,14 +12,14 @@ public class PredictionOutput {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException, IOException {
         int inputLayer = 2 * DataInput.M;
-        int[] hiddenLayers = new int[]{10, 10};
+        int[] hiddenLayers = new int[]{8, 3, 5};
         int outputLayer = 5;
 
         TrainingData trainingData = new TrainingData();
         trainingData.fill("train.txt", DataInput.M);
 
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(10_000, 1e-2, 1000);
+        nn.train(15_000, 10,0.085, 1000, false);
 
         SwingUtilities.invokeAndWait(() -> {
             new PredictionFrame(DataInput.M, nn).setVisible(true);
