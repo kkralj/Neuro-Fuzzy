@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-public class PredictionOutput {
+public class OutputPrediction {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException, IOException {
         int inputLayer = 2 * DataInput.M;
