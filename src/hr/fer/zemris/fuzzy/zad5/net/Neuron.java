@@ -19,8 +19,8 @@ public class Neuron {
 
     public Neuron(int size) {
         for (int i = 0; i < size; i++) {
-            weights.add(-5 + 10 * random.nextDouble());
-            biases.add(-5 + 10 * random.nextDouble());
+            weights.add(-1 + 2 * random.nextDouble());
+            biases.add(-1 + 2 * random.nextDouble());
         }
         tempWeights = new ArrayList<>(weights);
         tempBiases = new ArrayList<>(biases);
