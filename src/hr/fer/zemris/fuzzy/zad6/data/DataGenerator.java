@@ -3,7 +3,7 @@ package hr.fer.zemris.fuzzy.zad6.data;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class TrainingDataGenerator {
+public class DataGenerator {
 
     public static void main(String[] args) throws IOException {
         PrintWriter writer = new PrintWriter("lab6-data/train.txt", "UTF-8");
