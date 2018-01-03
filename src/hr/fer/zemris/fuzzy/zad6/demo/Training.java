@@ -11,12 +11,12 @@ public class Training {
     public static void main(String[] args) throws IOException {
         TrainingData trainingData = TrainingData.load(Paths.get("lab6-data/train.txt"));
 
-        int maxIterations = 10_000;
-        int numberOfRules = 5;
-        double learningRate = 0.0004;
+        int maxIterations = 25_000;
+        int numberOfRules = 10;
+        double learningRate = 0.002;
 
         ANFIS fnn = new ANFIS(maxIterations, numberOfRules, learningRate, trainingData);
-        fnn.train();
+        fnn.stohasticTrain();
     }
 
 }

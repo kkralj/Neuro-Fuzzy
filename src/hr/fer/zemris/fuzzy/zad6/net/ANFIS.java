@@ -24,64 +24,23 @@ public class ANFIS {
         }
     }
 
-    private double getError() {
-        double error = 0, out;
-        for (Point point : trainingData) {
-            out = forwardPass(point.getX1(), point.getX2());
-            error += (point.getY() - out) * (point.getY() - out);
+    private double forwardPass(double x1, double x2) {
+        double result = 0;
+        double wSum = getWSum(x1, x2);
+
+        for (Rule rule : rules) {
+            result += rule.getW(x1, x2) / wSum * rule.getF(x1, x2);
         }
-        return error / trainingData.getSize();
+
+        return result;
     }
 
-    public void train() {
-        double error;
-        for (int iteration = 0; iteration < maxIterations; iteration++) {
+    public void batchTrain() {
+        double error = Double.MAX_VALUE;
+
+        for (int it = 0; it <= maxIterations && error > 1e-6; it++) {
             for (Point point : trainingData) {
-                double x1 = point.getX1();
-                double x2 = point.getX2();
-                double yk = point.getY();
-
-                double ok = forwardPass(x1, x2);
-
-                double sumOfW = 0, sumOfWF = 0;
-                for (Rule rule : rules) {
-                    sumOfW += rule.getW(x1, x2);
-                    sumOfWF += rule.getW(x1, x2) * rule.getF(x1, x2);
-                }
-
-                for (Rule rule : rules) {
-                    double w = rule.getW(x1, x2);
-                    double f = rule.getF(x1, x2);
-
-                    double deltaP = -(yk - ok) * w / sumOfW * x1;
-                    double deltaQ = -(yk - ok) * w / sumOfW * x2;
-                    double deltaR = -(yk - ok) * w;
-
-                    rule.updateDeltaP(deltaP);
-                    rule.updateDeltaQ(deltaQ);
-                    rule.updateDeltaR(deltaR);
-
-                    double alpha = rule.getA().getValue(x1);
-                    double beta = rule.getB().getValue(x2);
-
-                    double deltaA1 = -(yk - ok) * (f * sumOfW - sumOfWF) / (sumOfW * sumOfW) *
-                            beta * alpha * (1 - alpha) * rule.getA().getB();
-
-                    double deltaB1 = -(yk - ok) * (f * sumOfW - sumOfWF) / (sumOfW * sumOfW) *
-                            beta * alpha * (1 - alpha) * (rule.getA().getA() - x1);
-
-                    rule.getA().updateDeltaA(deltaA1);
-                    rule.getA().updateDeltaB(deltaB1);
-
-                    double deltaA2 = -(yk - ok) * (f * sumOfW - sumOfWF) / (sumOfW * sumOfW) *
-                            alpha * beta * (1 - beta) * rule.getB().getB();
-
-                    double deltaB2 = -(yk - ok) * (f * sumOfW - sumOfWF) / (sumOfW * sumOfW) *
-                            alpha * beta * (1 - beta) * (rule.getB().getA() - x2);
-
-                    rule.getB().updateDeltaA(deltaA2);
-                    rule.getB().updateDeltaB(deltaB2);
-                }
+                trainPoint(point);
             }
 
             for (Rule rule : rules) {
@@ -89,27 +48,65 @@ public class ANFIS {
             }
 
             error = getError();
-            System.out.println("Iteration: " + iteration + " error: " + error);
-            if (error < 1e-6) return;
+            if (it % 1000 == 0) {
+                System.out.println("Iteration: " + it + " error: " + error);
+            }
         }
     }
 
-    private double forwardPass(double x1, double x2) {
-        List<Double> weights = new ArrayList<>();
-        List<Double> functionValues = new ArrayList<>();
+    public void stohasticTrain() {
+        double error = Double.MAX_VALUE;
 
-        double weightSum = 0;
+        for (int it = 0, i = 0; it <= maxIterations && error > 1e-6; it++, i = (i + 1) % trainingData.getSize()) {
+            trainPoint(trainingData.getData().get(i));
+
+            for (Rule rule : rules) {
+                rule.updateDeltas(learningRate);
+            }
+
+            error = getError();
+            if (it % 1000 == 0) {
+                System.out.println("Iteration: " + it + " error: " + error);
+            }
+        }
+    }
+
+    private void trainPoint(Point point) {
+        double x1 = point.getX1(), x2 = point.getX2();
+        double yk = point.getY(), ok = forwardPass(x1, x2);
+        double wSum = getWSum(x1, x2), wfSum = getWFSum(x1, x2);
+
         for (Rule rule : rules) {
-            weights.add(rule.getW(x1, x2));
-            functionValues.add(rule.getF(x1, x2));
-
-            weightSum += weights.get(weights.size() - 1);
+            rule.updateDeltaF(yk, ok, wSum, x1, x2);
+            rule.updateDeltaMemberships(yk, ok, wSum, wfSum, x1, x2);
         }
-
-        double result = 0;
-        for (int i = 0; i < weights.size(); i++) {
-            result += (weights.get(i) / weightSum) * functionValues.get(i);
-        }
-        return result;
     }
+
+    private double getError() {
+        double error = 0, out;
+
+        for (Point point : trainingData) {
+            out = forwardPass(point.getX1(), point.getX2());
+            error += (point.getY() - out) * (point.getY() - out);
+        }
+
+        return error / (2 * trainingData.getSize());
+    }
+
+    private double getWSum(double x1, double x2) {
+        double wSum = 0;
+        for (Rule rule : rules) {
+            wSum += rule.getW(x1, x2);
+        }
+        return wSum;
+    }
+
+    private double getWFSum(double x1, double x2) {
+        double wfSum = 0;
+        for (Rule rule : rules) {
+            wfSum += rule.getW(x1, x2) * rule.getF(x1, x2);
+        }
+        return wfSum;
+    }
+
 }

@@ -6,15 +6,13 @@ import java.io.PrintWriter;
 public class DataGenerator {
 
     public static void main(String[] args) throws IOException {
-        PrintWriter writer = new PrintWriter("lab6-data/train.txt", "UTF-8");
-
-        for (int x = -4; x <= 4; x++) {
-            for (int y = -4; y <= 4; y++) {
-                writer.write(x + " " + y + " " + getFunctionValue(x, y) + "\n");
+        try (PrintWriter writer = new PrintWriter("lab6-data/train.txt", "UTF-8")) {
+            for (int x = -4; x <= 4; x++) {
+                for (int y = -4; y <= 4; y++) {
+                    writer.write(x + " " + y + " " + getFunctionValue(x, y) + "\n");
+                }
             }
         }
-
-        writer.close();
     }
 
     private static double getFunctionValue(double x, double y) {

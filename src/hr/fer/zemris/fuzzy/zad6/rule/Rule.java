@@ -31,16 +31,24 @@ public class Rule {
         return p * x1 + q * x2 + r;
     }
 
-    public void updateDeltaP(double dp) {
-        this.dp += dp;
+    public void updateDeltaF(double yk, double ok, double sumOfW, double x1, double x2) {
+        double w = getW(x1, x2);
+        this.dp += -(yk - ok) * w / sumOfW * x1;
+        this.dq += -(yk - ok) * w / sumOfW * x2;
+        this.dr += -(yk - ok) * w / sumOfW;
     }
 
-    public void updateDeltaQ(double dq) {
-        this.dq += dq;
-    }
+    public void updateDeltaMemberships(double yk, double ok, double sumOfW, double sumOfWF, double x1, double x2) {
+        double alpha = A.getValue(x1);
+        double beta = B.getValue(x2);
+        double f = getF(x1, x2);
 
-    public void updateDeltaR(double dr) {
-        this.dr += dr;
+        double samePart = -(yk - ok) * (f * sumOfW - sumOfWF) / (sumOfW * sumOfW) * beta * alpha;
+
+        A.updateDeltaA(samePart * (1 - alpha) * A.getB());
+        A.updateDeltaB(samePart * (1 - alpha) * (A.getA() - x1));
+        B.updateDeltaA(samePart * (1 - beta) * B.getB());
+        B.updateDeltaB(samePart * (1 - beta) * (B.getA() - x2));
     }
 
     public void updateDeltas(double learningRate) {
@@ -51,13 +59,5 @@ public class Rule {
 
         A.updateDeltas(learningRate);
         B.updateDeltas(learningRate);
-    }
-
-    public MembershipFunction getA() {
-        return A;
-    }
-
-    public MembershipFunction getB() {
-        return B;
     }
 }
