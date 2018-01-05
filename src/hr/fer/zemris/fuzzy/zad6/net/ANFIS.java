@@ -24,7 +24,7 @@ public class ANFIS {
         }
     }
 
-    private double forwardPass(double x1, double x2) {
+    public double forwardPass(double x1, double x2) {
         double result = 0;
         double wSum = getWSum(x1, x2);
 
@@ -35,7 +35,8 @@ public class ANFIS {
         return result;
     }
 
-    public void batchTrain() {
+    public List<Double> batchTrain() {
+        List<Double> errors = new ArrayList<>();
         double error = Double.MAX_VALUE;
 
         for (int it = 0; it <= maxIterations && error > 1e-6; it++) {
@@ -48,27 +49,38 @@ public class ANFIS {
             }
 
             error = getError();
+            if (error > Double.MAX_VALUE) return errors;
             if (it % 1000 == 0) {
                 System.out.println("Iteration: " + it + " error: " + error);
             }
+            errors.add(error);
         }
+
+        return errors;
     }
 
-    public void stohasticTrain() {
+    public List<Double> stohasticTrain() {
+        List<Double> errors = new ArrayList<>();
         double error = Double.MAX_VALUE;
 
-        for (int it = 0, i = 0; it <= maxIterations && error > 1e-6; it++, i = (i + 1) % trainingData.getSize()) {
-            trainPoint(trainingData.getData().get(i));
+        for (int it = 0; it <= maxIterations && error > 1e-6; it++) {
+            for (Point point : trainingData) {
+                trainPoint(point);
 
-            for (Rule rule : rules) {
-                rule.updateDeltas(learningRate);
+                for (Rule rule : rules) {
+                    rule.updateDeltas(learningRate);
+                }
             }
 
             error = getError();
+            if (error > Double.MAX_VALUE) return errors;
             if (it % 1000 == 0) {
                 System.out.println("Iteration: " + it + " error: " + error);
             }
+            errors.add(error);
         }
+
+        return errors;
     }
 
     private void trainPoint(Point point) {
@@ -90,7 +102,7 @@ public class ANFIS {
             error += (point.getY() - out) * (point.getY() - out);
         }
 
-        return error / (2 * trainingData.getSize());
+        return error / trainingData.getSize();
     }
 
     private double getWSum(double x1, double x2) {
@@ -109,4 +121,7 @@ public class ANFIS {
         return wfSum;
     }
 
+    public List<Rule> getRules() {
+        return rules;
+    }
 }

@@ -60,4 +60,12 @@ public class Rule {
         A.updateDeltas(learningRate);
         B.updateDeltas(learningRate);
     }
+
+    public MembershipFunction getA() {
+        return A;
+    }
+
+    public MembershipFunction getB() {
+        return B;
+    }
 }
