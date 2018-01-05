@@ -12,9 +12,9 @@ public class NeuralNetTrain {
         int outputLayer = 5;
 
         TrainingData trainingData = new TrainingData();
-        trainingData.fill("train.txt", DataInput.M);
+        trainingData.fill("lab5-data/train.txt", DataInput.M);
 
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(10_000, 10,1e-2, 1000, false);
+        nn.train(10_000, 10, 1e-2, 1000, false);
     }
 }

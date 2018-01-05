@@ -11,7 +11,7 @@ public class TrainingData implements Iterable<Point> {
 
     public TrainingData(List<Point> data) {
         this.data = Objects.requireNonNull(data);
-        Collections.shuffle(data);
+//        Collections.shuffle(data);
     }
 
     public static TrainingData load(Path path) throws IOException {

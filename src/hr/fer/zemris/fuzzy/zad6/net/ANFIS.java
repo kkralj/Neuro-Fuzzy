@@ -66,7 +66,6 @@ public class ANFIS {
         for (int it = 0; it <= maxIterations && error > 1e-6; it++) {
             for (Point point : trainingData) {
                 trainPoint(point);
-
                 for (Rule rule : rules) {
                     rule.updateDeltas(learningRate);
                 }

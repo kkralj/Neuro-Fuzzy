@@ -28,7 +28,7 @@ public class NeuralNetQuadratic {
 
         TrainingData trainingData = new TrainingData(data, correct);
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(100_000, 1,0.5, 1000, false);
+        nn.train(100_000, 1, 0.5, 1000, false);
 
         for (int i = 0; i < inputs.length; i++) {
             System.out.println("Expected: " + outputs[i] + " Got: " + nn.predict(createDummyList(new double[]{inputs[i]})));

@@ -11,8 +11,8 @@ public class Training {
     public static void main(String[] args) throws IOException {
         TrainingData trainingData = TrainingData.load(Paths.get("lab6-data/train.txt"));
 
-        int maxIterations = 50_000;
-        int numberOfRules = 10;
+        int maxIterations = 30_000;
+        int numberOfRules = 8;
         double learningRate = 0.0005;
 
         ANFIS fnn = new ANFIS(maxIterations, numberOfRules, learningRate, trainingData);

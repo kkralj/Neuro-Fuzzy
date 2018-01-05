@@ -25,7 +25,7 @@ public class NeuralNetXOR {
 
         TrainingData trainingData = new TrainingData(data, correct);
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(100_000, 1,1, 1000, false);
+        nn.train(100_000, 1, 1, 1000, false);
 
         for (double[] input : inputs) {
             System.out.println(nn.predict(createDummyList(input)));

@@ -19,7 +19,7 @@ public class OutputPrediction {
         trainingData.fill("lab5-data/train.txt", DataInput.M);
 
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
-        nn.train(10_000, 10,0.085, 1000, false);
+        nn.train(10_000, 10, 0.085, 1000, false);
 
         SwingUtilities.invokeAndWait(() -> {
             new PredictionFrame(DataInput.M, nn).setVisible(true);
