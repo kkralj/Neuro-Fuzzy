@@ -57,7 +57,6 @@ public class GenerationGA {
         for (int i = 0; i < 5; i++) {
             double cmin = Math.min(b1[i], b2[i]);
             double cmax = Math.max(b1[i], b2[i]);
-//            betas[i] = (0.4 + 0.2 * random.nextDouble()) * (b1[i] + b2[i]);
             betas[i] = cmin + random.nextDouble() * (cmax - cmin);
 
         }
