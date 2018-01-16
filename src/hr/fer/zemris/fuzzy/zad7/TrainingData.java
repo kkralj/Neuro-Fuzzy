@@ -2,7 +2,7 @@ package hr.fer.zemris.fuzzy.zad7;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class TrainingData implements Iterable<Point> {
@@ -11,13 +11,12 @@ public class TrainingData implements Iterable<Point> {
 
     public TrainingData(List<Point> data) {
         this.data = Objects.requireNonNull(data);
-        Collections.shuffle(data);
     }
 
-    public static TrainingData load(Path path) throws IOException {
+    public static TrainingData load(String path) throws IOException {
         List<Point> points = new ArrayList<>();
 
-        List<String> lines = Files.readAllLines(path);
+        List<String> lines = Files.readAllLines(Paths.get(path));
         for (String line : lines) {
             String[] values = line.trim().split("\\s+");
             if (values.length == 5) {
