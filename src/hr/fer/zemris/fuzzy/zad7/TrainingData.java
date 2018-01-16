@@ -1,4 +1,4 @@
-package hr.fer.zemris.fuzzy.zad6.data;
+package hr.fer.zemris.fuzzy.zad7;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,16 +20,24 @@ public class TrainingData implements Iterable<Point> {
         List<String> lines = Files.readAllLines(path);
         for (String line : lines) {
             String[] values = line.trim().split("\\s+");
-            if (values.length == 3) {
+            if (values.length == 5) {
                 points.add(new Point(
                         Double.parseDouble(values[0]),
                         Double.parseDouble(values[1]),
-                        Double.parseDouble(values[2])
+                        new double[]{
+                                Double.parseDouble(values[2]),
+                                Double.parseDouble(values[3]),
+                                Double.parseDouble(values[4])
+                        }
                 ));
             }
         }
 
         return new TrainingData(points);
+    }
+
+    public Point getPoint(int i) {
+        return data.get(i);
     }
 
     public int getSize() {
