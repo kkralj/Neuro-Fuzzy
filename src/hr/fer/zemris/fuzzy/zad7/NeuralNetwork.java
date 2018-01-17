@@ -21,19 +21,12 @@ public class NeuralNetwork {
         outputs = new double[getOutputCount()];
     }
 
-    public double calcError(double[] params) {
-        double mse = 0;
-
-        for (Point point : trainingData) {
-            calcOutput(point.getX1(), point.getX2(), params);
-            for (int i = 0; i < 3; i++) {
-                mse += Math.pow(point.getY()[0] - outputs[outputs.length - 3 + i], 2);
-            }
+    private int getOutputCount() {
+        int tot = 0;
+        for (int layer : layers) {
+            tot += layer;
         }
-
-        mse /= trainingData.getSize();
-
-        return mse;
+        return tot;
     }
 
     public int getParameterCount() {
@@ -46,56 +39,76 @@ public class NeuralNetwork {
         return tot;
     }
 
-    private void calcOutput(double x1, double x2, double[] params) {
-        if (params.length != getParameterCount()) {
-            throw new IllegalArgumentException();
+    private double f1(double x) {
+        return 1. / (1 + x);
+    }
+
+    private double f2(double x) {
+        return 1. / (1 + Math.exp(-x));
+    }
+
+    public double calcError(double[] params) {
+        double mse = 0;
+
+        for (Point p : trainingData) {
+            calcOutput(p.getX1(), p.getX2(), params);
+
+            for (int i = 0; i < 3; i++) {
+                mse += Math.pow(p.getY()[i] - outputs[(outputs.length - 3) + i], 2);
+            }
         }
 
+        return mse / trainingData.getSize();
+    }
+
+    private void calcOutput(double x1, double x2, double[] params) {
         outputs[0] = x1;
         outputs[1] = x2;
 
-        int paramInd = 0, outputInd = 2, prevOutputInd = 0;
+        int paramInd = 0, outputInd = 2;
 
-        for (int i = 1; i < layers.length; i++) {
+        // first hidden layer (f1)
+        for (int j = 0; j < layers[1]; j++) {
+            double net = f1(
+                    Math.abs(x1 - params[paramInd++]) / Math.abs(params[paramInd++]) +
+                    Math.abs(x2 - params[paramInd++]) / Math.abs(params[paramInd++])
+            );
+            outputs[outputInd++] = net;
+        }
 
+        int prevOutputInd = 2;
+
+        // rest (f2)
+        for (int i = 2; i < layers.length; i++) {
             for (int j = 0; j < layers[i]; j++) {
-                if (i == 1) {
-                    double net = f2(
-                            Math.abs(x1 - params[paramInd++]) / Math.abs(params[paramInd++]) +
-                                    Math.abs(x2 - params[paramInd++]) / Math.abs(params[paramInd++])
-                    );
+                double net = params[paramInd++]; // w0
 
-                    outputs[outputInd++] = net;
-
-                } else {
-                    double net = params[paramInd++]; // w0
-
-                    for (int q = 0; q < layers[i - 1]; q++) {
-                        net += params[paramInd++] * outputs[prevOutputInd + q];
-                    }
-
-                    outputs[outputInd++] = f1(net);
+                for (int q = 0; q < layers[i - 1]; q++) {
+                    net += params[paramInd++] * outputs[prevOutputInd + q];
                 }
-            }
 
+                outputs[outputInd++] = f2(net);
+            }
             prevOutputInd += layers[i - 1];
         }
 
     }
 
-    private int getOutputCount() {
-        int tot = 0;
-        for (int layer : layers) {
-            tot += layer;
+    public void evaluate(double[] params) {
+        int correct = 0;
+        for (Point p : trainingData) {
+            calcOutput(p.getX1(), p.getX2(), params);
+
+            boolean valid = true;
+
+            for (int i = 0; i < 3; i++) {
+                int truncated = outputs[outputs.length - 3 + i] >= 0.5 ? 1 : 0;
+                valid &= truncated == p.getY()[i];
+            }
+
+            correct += valid ? 1 : 0;
         }
-        return tot;
-    }
 
-    private double f1(double x) {
-        return 1. / (1 + Math.exp(-x));
-    }
-
-    private double f2(double x) {
-        return 1. / (1 + x);
+        System.out.println("Correct: " + correct + ", Incorrect: " + (trainingData.getSize() - correct));
     }
 }

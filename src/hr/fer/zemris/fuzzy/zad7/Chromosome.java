@@ -30,11 +30,15 @@ public class Chromosome implements Comparable<Chromosome> {
     }
 
     public double getFitness() {
-        return -error;
+        return 1 / error;
     }
 
     public double[] getParams() {
         return params;
+    }
+
+    public double getParam(int i) {
+        return this.params[i];
     }
 
     public void setParam(int i, double param) {
@@ -44,7 +48,7 @@ public class Chromosome implements Comparable<Chromosome> {
     private static Chromosome getRandom(int size) {
         double[] params = new double[size];
         for (int i = 0; i < size; i++) {
-            params[i] = -1 + 2 * random.nextDouble();
+            params[i] = -5 + 10 * random.nextDouble();
         }
         return new Chromosome(params);
     }
