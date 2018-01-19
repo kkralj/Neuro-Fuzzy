@@ -10,6 +10,7 @@ public class Chromosome implements Comparable<Chromosome> {
     private static Random random = new Random();
 
     private double[] params;
+
     public double error;
 
     Chromosome(double[] params) {

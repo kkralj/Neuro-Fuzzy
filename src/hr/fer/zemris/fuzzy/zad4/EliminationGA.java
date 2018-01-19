@@ -43,7 +43,7 @@ public class EliminationGA {
         System.out.println(sol);
     }
 
-    private List<Integer> getSortedRandomInts(int size, int upperBound) {
+    public static List<Integer> getSortedRandomInts(int size, int upperBound) {
         List<Integer> numbers = new ArrayList<>();
 
         int rand;

@@ -38,10 +38,6 @@ public class TrainingData implements Iterable<Point> {
         return new TrainingData(points);
     }
 
-    public Point getPoint(int i) {
-        return data.get(i);
-    }
-
     public int getSize() {
         return data.size();
     }

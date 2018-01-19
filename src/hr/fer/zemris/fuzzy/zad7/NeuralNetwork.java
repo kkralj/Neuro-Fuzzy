@@ -13,7 +13,7 @@ public class NeuralNetwork {
 
     public NeuralNetwork(TrainingData trainingData, int[] hiddenLayers) {
         if (hiddenLayers.length < 1) {
-            throw new IllegalArgumentException("At east one hidden layer required!.");
+            throw new IllegalArgumentException("At least one hidden layer required.");
         }
 
         this.trainingData = trainingData;
@@ -115,20 +115,6 @@ public class NeuralNetwork {
         }
 
         System.out.println("Correct: " + correct + ", Incorrect: " + (trainingData.getSize() - correct));
-    }
-
-    public void printWeights(double[] parameters) {
-        if (parameters.length != getParameterCount()) {
-            throw new IllegalArgumentException();
-        }
-
-        for (int i = 0; i < layers[1]; i++) {
-            System.out.println("Neuron " + i + " (u1, s1, u2, s2):");
-            for (int j = 0; j < 4; j++) {
-                System.out.println(parameters[4 * i + j]);
-            }
-            System.out.println();
-        }
     }
 
     public void storeParameters(String path, double[] parameters) throws IOException {

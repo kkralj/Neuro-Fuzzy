@@ -1,5 +1,7 @@
 package hr.fer.zemris.fuzzy.zad7;
 
+import hr.fer.zemris.fuzzy.zad4.EliminationGA;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +27,8 @@ public class GA {
             if (population.get(0).error < EPS) break;
 
             List<Chromosome> parents = new ArrayList<>();
-            List<Integer> kRandoms = getRandomSortedInts(3, populationSize);
+            List<Integer> kRandoms = EliminationGA.getSortedRandomInts(3, populationSize);
+
             for (int i = 0; i < kRandoms.size() - 1; i++) {
                 parents.add(population.get(kRandoms.get(i)));
             }
@@ -56,38 +59,21 @@ public class GA {
         return population.get(0).getParams();
     }
 
-    private void mutate1(Chromosome chr, double mp, double sigma) {
+    private void mutate1(Chromosome chr, double mutationProbability, double sigma) {
         for (int i = 0; i < chr.getParams().length; i++) {
-            if (random.nextDouble() < mp) {
+            if (random.nextDouble() < mutationProbability) {
                 chr.setParam(i, chr.getParam(i) + random.nextGaussian() * sigma);
             }
         }
     }
 
-    private void mutate2(Chromosome chr, double mp, double sigma) {
+    private void mutate2(Chromosome chr, double mutationProbability, double sigma) {
         for (int i = 0; i < chr.getParams().length; i++) {
-            if (random.nextDouble() < mp) {
+            if (random.nextDouble() < mutationProbability) {
                 chr.setParam(i, random.nextGaussian() * sigma);
                 return;
             }
         }
-    }
-
-    private List<Integer> getRandomSortedInts(int size, int upperBound) {
-        List<Integer> numbers = new ArrayList<>();
-
-        int rand;
-        for (int i = 0; i < size; i++) {
-            do {
-                rand = random.nextInt(upperBound);
-            } while (numbers.contains(rand));
-
-            numbers.add(rand);
-        }
-
-        Collections.sort(numbers);
-
-        return numbers;
     }
 
     private Chromosome randomCrossover(Chromosome parent1, Chromosome parent2) {
