@@ -1,5 +1,10 @@
 package hr.fer.zemris.fuzzy.zad7;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class NeuralNetwork {
 
     private int[] layers;
@@ -110,5 +115,28 @@ public class NeuralNetwork {
         }
 
         System.out.println("Correct: " + correct + ", Incorrect: " + (trainingData.getSize() - correct));
+    }
+
+    public void printWeights(double[] parameters) {
+        if (parameters.length != getParameterCount()) {
+            throw new IllegalArgumentException();
+        }
+
+        for (int i = 0; i < layers[1]; i++) {
+            System.out.println("Neuron " + i + " (u1, s1, u2, s2):");
+            for (int j = 0; j < 4; j++) {
+                System.out.println(parameters[4 * i + j]);
+            }
+            System.out.println();
+        }
+    }
+
+    public void storeParameters(String path, double[] parameters) throws IOException {
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(path)));
+        out.write(layers[1] + "\n");
+        for (double param : parameters) {
+            out.write(param + "\n");
+        }
+        out.close();
     }
 }

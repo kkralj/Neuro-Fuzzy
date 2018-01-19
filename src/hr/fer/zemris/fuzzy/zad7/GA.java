@@ -7,75 +7,53 @@ import java.util.Random;
 
 public class GA {
 
-    private static final double EPS = 1e-7;
+    private static final double EPS = 1e-8;
     private static final Random random = new Random();
 
-    public double[] run(NeuralNetwork nn, int elitismSize,
+    public double[] run(NeuralNetwork nn,
                         int populationSize, int generations,
                         double mutationProbability, double v1,
                         double sigma1, double sigma2) {
 
-        int totalIterations = generations * populationSize;
-
         List<Chromosome> population = Chromosome.getRandomPopulation(populationSize, nn);
 
+        int totalIterations = generations * populationSize;
+
         for (int iteration = 1; iteration <= totalIterations; iteration++) {
+
             Collections.sort(population);
             if (population.get(0).error < EPS) break;
 
-            List<Chromosome> nextPopulation = new ArrayList<>();
-            for (int i = 0; i < elitismSize; i++) {
-                nextPopulation.add(population.get(i));
+            List<Chromosome> parents = new ArrayList<>();
+            List<Integer> kRandoms = getRandomSortedInts(3, populationSize);
+            for (int i = 0; i < kRandoms.size() - 1; i++) {
+                parents.add(population.get(kRandoms.get(i)));
             }
 
-            for (int i = nextPopulation.size(); i < populationSize; i++) {
-                Chromosome[] parents = proportionalSelection(population);
-                Chromosome child = randomCrossover(parents[0], parents[1]);
+            Chromosome newChild = randomCrossover(parents.get(0), parents.get(1));
 
-                if (random.nextDouble() < v1) {
-                    mutate1(child, mutationProbability, sigma1);
-                } else {
-                    mutate2(child, mutationProbability, sigma2);
-                }
-
-                child.error = nn.calcError(child.getParams());
-                nextPopulation.add(child);
+            if (random.nextDouble() < v1) {
+                mutate1(newChild, mutationProbability, sigma1);
+            } else {
+                mutate2(newChild, mutationProbability, sigma2);
             }
 
-            if (iteration % 1000 == 0) {
+            newChild.error = nn.calcError(newChild.getParams());
+
+            // replace worst child
+            int worstIndex = kRandoms.get(kRandoms.size() - 1);
+            population.set(worstIndex, newChild);
+
+            if (iteration % (0.05 * totalIterations) == 0) {
                 System.out.println(population.get(0).error);
             }
 
-            population = nextPopulation;
         }
 
         Collections.sort(population);
+        System.out.println(population.get(0).error);
 
         return population.get(0).getParams();
-    }
-
-    private Chromosome[] proportionalSelection(List<Chromosome> population) {
-        Chromosome[] parents = new Chromosome[2];
-
-        double totalFitness = 0;
-        for (Chromosome ch : population) {
-            totalFitness += ch.getFitness();
-        }
-
-        for (int parentIndex = 0; parentIndex < 2; parentIndex++) {
-            double limit = random.nextDouble() * totalFitness;
-
-            int chosen = 0;
-            double upperLimit = population.get(chosen).getFitness();
-            while (limit > upperLimit && chosen + 1 < population.size()) {
-                chosen++;
-                upperLimit += population.get(chosen).getFitness();
-            }
-
-            parents[parentIndex] = population.get(chosen);
-        }
-
-        return parents;
     }
 
     private void mutate1(Chromosome chr, double mp, double sigma) {
@@ -93,6 +71,23 @@ public class GA {
                 return;
             }
         }
+    }
+
+    private List<Integer> getRandomSortedInts(int size, int upperBound) {
+        List<Integer> numbers = new ArrayList<>();
+
+        int rand;
+        for (int i = 0; i < size; i++) {
+            do {
+                rand = random.nextInt(upperBound);
+            } while (numbers.contains(rand));
+
+            numbers.add(rand);
+        }
+
+        Collections.sort(numbers);
+
+        return numbers;
     }
 
     private Chromosome randomCrossover(Chromosome parent1, Chromosome parent2) {
