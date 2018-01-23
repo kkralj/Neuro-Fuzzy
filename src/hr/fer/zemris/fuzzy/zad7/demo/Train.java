@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Train {
     public static void main(String[] args) throws IOException {
         TrainingData td = TrainingData.load("lab7-data/zad7-dataset.txt");
-        int[] hiddenLayers = new int[]{6, 4};
+        int[] hiddenLayers = new int[]{8};
 
         NeuralNetwork nn = new NeuralNetwork(td, hiddenLayers);
 
