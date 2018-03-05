@@ -7,7 +7,7 @@ public class Layer {
 
     private List<Neuron> neurons = new ArrayList<>();
 
-    public Layer(int layerSize, int nextLayerSize) {
+    Layer(int layerSize, int nextLayerSize) {
         for (int i = 0; i < layerSize; i++) {
             this.neurons.add(new Neuron(nextLayerSize));
         }

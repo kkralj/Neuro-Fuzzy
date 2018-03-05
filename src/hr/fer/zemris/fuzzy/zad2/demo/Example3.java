@@ -3,7 +3,7 @@ package hr.fer.zemris.fuzzy.zad2.demo;
 import hr.fer.zemris.fuzzy.zad1.*;
 import hr.fer.zemris.fuzzy.zad2.Relations;
 
-public class Primjer3 {
+public class Example3 {
 
     public static void main(String[] args) {
         IDomain u = Domain.intRange(1, 5);
@@ -22,18 +22,18 @@ public class Primjer3 {
 
         IFuzzySet r2 = r;
 
-        System.out.println("Početna relacija je neizrazita relacija ekvivalencije? " + Relations.isFuzzyEquivalence(r2));
+        System.out.println("Initial relation is fuzzy equivalence relation? " + Relations.isFuzzyEquivalence(r2));
         System.out.println();
 
         for (int i = 1; i <= 30; i++) {
             r2 = Relations.compositionOfBinaryRelations(r2, r);
-            System.out.println("Broj odrađenih kompozicija: " + i + ". Relacija je:");
+            System.out.println("Number of compositions: " + i + ". Relation is:");
 
             for (DomainElement e : r2.getDomain()) {
                 System.out.println("mu(" + e + ")=" + r2.getValueAt(e));
             }
 
-            System.out.println("Ova relacija je neizrazita relacija ekvivalencije? " + Relations.isFuzzyEquivalence(r2));
+            System.out.println("Is this fuzzy equivalence relation? " + Relations.isFuzzyEquivalence(r2));
             System.out.println();
         }
 

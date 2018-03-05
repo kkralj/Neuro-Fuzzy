@@ -13,7 +13,7 @@ public class GestureDrawingPanel extends JPanel {
 
     private List<Point> points = new ArrayList<>();
 
-    public GestureDrawingPanel() {
+    GestureDrawingPanel() {
         this.setOpaque(true);
         this.setBackground(Color.WHITE);
         init();

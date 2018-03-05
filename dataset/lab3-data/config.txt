@@ -1,0 +1,4 @@
+java -jar fuzzyControlSystem.jar 
+2
+20
+10

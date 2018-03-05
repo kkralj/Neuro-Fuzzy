@@ -11,22 +11,18 @@ public class Chromosome implements Comparable<Chromosome> {
 
     private double[] betas;
 
-    public Chromosome(double[] betas) {
+    public double error;
+
+    Chromosome(double[] betas) {
         this.betas = betas;
     }
 
-    public double error;
-
-    public static Chromosome getRandom() {
+    private static Chromosome getRandom() {
         double[] betas = new double[5];
         for (int i = 0; i < 5; i++) {
             betas[i] = -4 + 8 * random.nextDouble();
         }
         return new Chromosome(betas);
-    }
-
-    public double getBeta(int i) {
-        return betas[i];
     }
 
     public double[] getBetas() {

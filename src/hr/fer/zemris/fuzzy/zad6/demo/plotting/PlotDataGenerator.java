@@ -24,19 +24,19 @@ public class PlotDataGenerator {
 
         for (int i = 0; i < fnn.getRules().size(); i++) {
             MembershipFunction A = fnn.getRules().get(i).getA();
-            storeData("lab6-data/memberships/rule-" + (i + 1) + "-membership-A.dat", A);
+            storeData("dataset/lab6-data/memberships/rule-" + (i + 1) + "-membership-A.txt", A);
             MembershipFunction B = fnn.getRules().get(i).getB();
-            storeData("lab6-data/memberships/rule-" + (i + 1) + "-membership-B.dat", B);
+            storeData("dataset/lab6-data/memberships/rule-" + (i + 1) + "-membership-B.txt", B);
         }
 
-        storeOutputError("lab6-data/errors/output-error.dat", fnn);
+        storeOutputError("dataset/lab6-data/errors/output-error.txt", fnn);
 
         fnn = new ANFIS(maxIterations, numberOfRules, learningRate, trainingData);
         System.out.println("Stohastic training:");
         List<Double> stohasticErrors = fnn.stohasticTrain();
 
-        storeErrors("lab6-data/errors/batch-errors.dat", batchErrors);
-        storeErrors("lab6-data/errors/stohastic-errors.dat", stohasticErrors);
+        storeErrors("dataset/lab6-data/errors/batch-errors.txt", batchErrors);
+        storeErrors("dataset/lab6-data/errors/stohastic-errors.txt", stohasticErrors);
     }
 
     public static void storeErrors(String name, List<Double> errors) throws IOException {

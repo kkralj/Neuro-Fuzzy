@@ -3,7 +3,7 @@ package hr.fer.zemris.fuzzy.zad2.demo;
 import hr.fer.zemris.fuzzy.zad1.*;
 import hr.fer.zemris.fuzzy.zad2.Relations;
 
-public class Primjer2 {
+public class Example2 {
 
     public static void main(String[] args) {
         IDomain u1 = Domain.intRange(1, 5);

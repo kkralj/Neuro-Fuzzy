@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class Training {
 
     public static void main(String[] args) throws IOException {
-        TrainingData trainingData = TrainingData.load(Paths.get("lab6-data/train.txt"));
+        TrainingData trainingData = TrainingData.load(Paths.get("dataset/lab6-data/train.txt"));
 
         int maxIterations = 30_000;
         int numberOfRules = 8;

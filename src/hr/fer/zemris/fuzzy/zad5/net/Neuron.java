@@ -17,7 +17,7 @@ public class Neuron {
     private double value;
     private double delta;
 
-    public Neuron(int size) {
+    Neuron(int size) {
         for (int i = 0; i < size; i++) {
             weights.add(-1 + 2 * random.nextDouble());
             biases.add(-1 + 2 * random.nextDouble());

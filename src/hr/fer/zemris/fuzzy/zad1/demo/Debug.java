@@ -13,12 +13,12 @@ public class Debug {
 
         int cnt = 0;
         for (DomainElement element : domain) {
-            System.out.println("Element domene je: " + element);
+            System.out.println("Domain element is: " + element);
             cnt++;
         }
 
-        System.out.println("Kardinalitet domene je: " + domain.getCardinality());
-        System.out.println("Ispisano " + cnt + " elemenata");
+        System.out.println("Domain cardinality is: " + domain.getCardinality());
+        System.out.println("Printed " + cnt + " elements");
         System.out.println();
     }
 

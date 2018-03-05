@@ -24,7 +24,7 @@ public class FuzzyControlSystem {
         String line;
         while (true) {
             if ((line = reader.readLine()) == null) continue;
-            if (line.charAt(0) == 'K') break; // 'KRAJ'
+            if (line.charAt(0) == 'K') break; // END
 
             Scanner s = new Scanner(line);
             L = s.nextInt();

@@ -15,7 +15,7 @@ public class Rule {
     private IFuzzySet[] antecedents;
     private IFuzzySet conclusion;
 
-    public Rule(IFuzzySet[] antecedents, IFuzzySet conclusion) {
+    Rule(IFuzzySet[] antecedents, IFuzzySet conclusion) {
         this.antecedents = Objects.requireNonNull(antecedents);
         this.conclusion = Objects.requireNonNull(conclusion);
     }

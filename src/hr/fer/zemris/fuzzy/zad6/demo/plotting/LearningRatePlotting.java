@@ -20,7 +20,7 @@ public class LearningRatePlotting {
 
             System.out.println("Batch training:");
             List<Double> batchErrors = fnn.batchTrain();
-            PlotDataGenerator.storeErrors("lab6-data/learningRates/batch-errors-" + learningRate + ".dat", batchErrors);
+            PlotDataGenerator.storeErrors("dataset/lab6-data/learningRates/batch-errors-" + learningRate + ".txt", batchErrors);
             System.out.println("Batch training error: " + batchErrors.get(batchErrors.size() - 1));
         }
 
@@ -32,7 +32,7 @@ public class LearningRatePlotting {
 
             System.out.println("Stohastic training:");
             List<Double> stohasticErrors = fnn.stohasticTrain();
-            PlotDataGenerator.storeErrors("lab6-data/learningRates/stohastic-errors-" + learningRate + ".dat", stohasticErrors);
+            PlotDataGenerator.storeErrors("dataset/lab6-data/learningRates/stohastic-errors-" + learningRate + ".txt", stohasticErrors);
             System.out.println("Stohastic training error: " + stohasticErrors.get(stohasticErrors.size() - 1));
         }
     }

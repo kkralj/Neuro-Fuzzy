@@ -11,7 +11,6 @@ public class NeuralNetwork {
 
     private List<Layer> layers = new ArrayList<>();
 
-
     public NeuralNetwork(TrainingData trainingData, int inputLayer, int[] hiddenLayers, int outputLayer) {
         this.trainingData = trainingData;
 

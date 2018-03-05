@@ -3,7 +3,7 @@ package hr.fer.zemris.fuzzy.zad2.demo;
 import hr.fer.zemris.fuzzy.zad1.*;
 import hr.fer.zemris.fuzzy.zad2.Relations;
 
-public class Primjer1 {
+public class Example1 {
     public static void main(String[] args) {
         IDomain u = Domain.intRange(1, 6); // {1,2,3,4,5}
         IDomain u2 = Domain.combine(u, u);
@@ -53,24 +53,24 @@ public class Primjer1 {
                 .set(DomainElement.of(3, 1), 0.4);
 
         boolean test1 = Relations.isUtimesURelation(r1);
-        System.out.println("r1 je definiran nad UxU? " + test1);
+        System.out.println("r1 is defined on UxU? " + test1);
 
         boolean test2 = Relations.isSymmetric(r1);
-        System.out.println("r1 je simetrična? " + test2);
+        System.out.println("r1 is symetric? " + test2);
 
         boolean test3 = Relations.isSymmetric(r2);
-        System.out.println("r2 je simetrična? " + test3);
+        System.out.println("r2 is symetric? " + test3);
 
         boolean test4 = Relations.isReflexive(r1);
-        System.out.println("r1 je refleksivna? " + test4);
+        System.out.println("r1 is reflexive? " + test4);
 
         boolean test5 = Relations.isReflexive(r3);
-        System.out.println("r3 je refleksivna? " + test5);
+        System.out.println("r3 is reflexive? " + test5);
 
         boolean test6 = Relations.isMaxMinTransitive(r3);
-        System.out.println("r3 je max-min tranzitivna? " + test6);
+        System.out.println("r3 is max-min transitive? " + test6);
 
         boolean test7 = Relations.isMaxMinTransitive(r4);
-        System.out.println("r4 je max-min tranzitivna? " + test7);
+        System.out.println("r4 is max-min transitive? " + test7);
     }
 }

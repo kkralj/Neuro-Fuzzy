@@ -1,0 +1,10 @@
+Lab-3:
+Steps required to run the simulation:
+1) Create JAR file named 'fuzzyControlSystem.jar' using hr.fer.zemris.fuzzy.zad3.demo.FuzzyControlSystem as the main class
+2) Copy it into this folder
+3) Run 'java -jar Simulator.jar'
+
+Lab-5:
+1) (Optional) create samples by using DataInput class
+2) Run OutputPrediction to train neural network
+3) Draw symbols to test results

@@ -16,7 +16,7 @@ public class OutputPrediction {
         int outputLayer = 5;
 
         TrainingData trainingData = new TrainingData();
-        trainingData.fill("lab5-data/train.txt", DataInput.M);
+        trainingData.fill("dataset/lab5-data/train.txt", DataInput.M);
 
         NeuralNetwork nn = new NeuralNetwork(trainingData, inputLayer, hiddenLayers, outputLayer);
         nn.train(10_000, 10, 0.085, 1000, false);

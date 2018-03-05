@@ -5,13 +5,13 @@ import hr.fer.zemris.fuzzy.zad1.*;
 public class Main {
     public static void main(String[] args) {
         IDomain d1 = Domain.intRange(2, 6);
-        Debug.print(d1, "Elementi domene d1:");
+        Debug.print(d1, "Elements of domain d1:");
 
         IDomain d2 = Domain.intRange(9, 10);
-        Debug.print(d2, "Elementi domene d2:");
+        Debug.print(d2, "Elements of domain d2:");
 
         IDomain d3 = Domain.combine(d1, d2);
-        Debug.print(d3, "Elementi domene d3:");
+        Debug.print(d3, "Elements of domain d3:");
 
         System.out.println(d3.elementForIndex(0));
         System.out.println(d3.elementForIndex(5));
@@ -25,6 +25,6 @@ public class Main {
                 (SimpleDomain) Domain.intRange(0, 5),
                 (SimpleDomain) Domain.intRange(0, 5)
         );
-        Debug.print(d5, "Elementi domene d5:");
+        Debug.print(d5, "Elements of domain d5:");
     }
 }

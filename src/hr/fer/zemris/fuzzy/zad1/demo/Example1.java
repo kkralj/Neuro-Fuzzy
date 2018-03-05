@@ -2,7 +2,7 @@ package hr.fer.zemris.fuzzy.zad1.demo;
 
 import hr.fer.zemris.fuzzy.zad1.*;
 
-public class Primjer1 {
+public class Example1 {
     public static void main(String[] args) {
         IDomain d = Domain.intRange(0, 11);
 
@@ -12,7 +12,7 @@ public class Primjer1 {
                 .set(DomainElement.of(2), 0.6)
                 .set(DomainElement.of(3), 0.4)
                 .set(DomainElement.of(4), 0.2);
-        Debug.print(set1, "Set1:");
+        Debug.print(set1, "Set 1:");
 
         IDomain d2 = Domain.intRange(-5, 6);
         IFuzzySet set2 = new CalculatedFuzzySet(
@@ -23,6 +23,6 @@ public class Primjer1 {
                         d2.indexOfElement(DomainElement.of(4))
                 )
         );
-        Debug.print(set2, "Set2:");
+        Debug.print(set2, "Set 2:");
     }
 }

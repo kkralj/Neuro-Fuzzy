@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Train {
     public static void main(String[] args) throws IOException {
-        TrainingData td = TrainingData.load("lab7-data/zad7-dataset.txt");
+        TrainingData td = TrainingData.load("dataset/lab7-data/zad7-dataset.txt");
         int[] hiddenLayers = new int[]{8};
 
         NeuralNetwork nn = new NeuralNetwork(td, hiddenLayers);
@@ -18,7 +18,7 @@ public class Train {
         double[] parameters = ga.run(nn, 25, 60_000, 0.008, 0.88, 0.30, 0.60);
 
         nn.evaluate(parameters);
-        nn.storeParameters("lab7-data/train-params-2" + hiddenLayersString(hiddenLayers) + "3.txt", parameters);
+        nn.storeParameters("dataset/lab7-data/train-params-2" + hiddenLayersString(hiddenLayers) + "3.txt", parameters);
     }
 
     private static String hiddenLayersString(int[] hiddenLayers) {
